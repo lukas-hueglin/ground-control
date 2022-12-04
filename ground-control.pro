@@ -10,13 +10,19 @@ CONFIG += c++17
 
 SOURCES += \
     editor.cpp \
+    grapheditor.cpp \
     main.cpp \
     mainwindow.cpp \
+    module.cpp \
+    viewport.cpp \
     workspace.cpp
 
 HEADERS += \
     editor.h \
+    grapheditor.h \
     mainwindow.h \
+    module.h \
+    viewport.h \
     workspace.h
 
 FORMS += \

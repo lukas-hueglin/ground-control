@@ -10,20 +10,20 @@
 #include <QParallelAnimationGroup>
 
 
-class Editor : public QDockWidget
+class Editor : public QWidget
 {
     Q_OBJECT
 public:
     explicit Editor(QWidget *parent = nullptr);
 
-public slots:
-    void splitEditorHorizontally();
-    void splitEditorVertically();
+public:
+    QWidget* getViewport();
 
-private:
-    QMainWindow *workspace;
-    QMainWindow *mainWindow;
-    QWidget* viewport;
+protected:
+    void setupDrawer();
+
+protected:
+    QWidget *viewport;
 
     QGroupBox *drawer;
     QToolButton *drawerButton;

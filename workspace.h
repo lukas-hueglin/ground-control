@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 
-#include "editor.h"
 
 class Workspace : public QMainWindow
 {

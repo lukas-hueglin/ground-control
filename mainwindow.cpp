@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include "workspace.h"
-#include "editor.h"
+#include "module.h"
 
 
 MainWindow::MainWindow(QWidget *parent)
@@ -22,7 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     // hide statusbar
     statusBar()->hide();
 
-    // make undockable
+    // set title
+    setWindowTitle(QString("Ground Control"));
 }
 
 MainWindow::~MainWindow()
@@ -37,7 +38,8 @@ void MainWindow::on_actionNew_Editor_triggered()
     QMainWindow *workspace = qobject_cast<QMainWindow*>(tabWidget->currentWidget());
 
     // create QDockWidget and add it to the workspace
-    Editor *editor = new Editor(workspace);
-    workspace->addDockWidget(Qt::RightDockWidgetArea, editor);
+    Module *module = new Module(workspace);
+    //module->show();
+    workspace->addDockWidget(Qt::RightDockWidgetArea, module);
 }
 
