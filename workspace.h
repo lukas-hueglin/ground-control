@@ -10,7 +10,8 @@ class Workspace : public QMainWindow
 public:
     explicit Workspace(QWidget *parent = nullptr);
 
-signals:
+private:
+    QMainWindow *parent;
 
 };
 
