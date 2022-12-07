@@ -17,8 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(tabWidget);
 
     // add tabs
-    tabWidget->addTab(new Workspace, QString("Workspace 1"));
-    tabWidget->addTab(new Workspace, QString("Workspace 2"));
+    tabWidget->addTab(new Workspace(this), QString("Workspace 1"));
+    tabWidget->addTab(new Workspace(this), QString("Workspace 2"));
 
     // hide statusbar
     statusBar()->hide();
@@ -45,10 +45,10 @@ void MainWindow::setFile(QFile *f){
 void MainWindow::on_actionNew_Editor_triggered()
 {
     // get active workspace
-    QMainWindow *workspace = qobject_cast<QMainWindow*>(tabWidget->currentWidget());
+    Workspace *workspace = qobject_cast<Workspace*>(tabWidget->currentWidget());
 
     // create QDockWidget and add it to the workspace
-    Module *module = new Module(workspace);
+    Module *module = new Module(workspace, this);
     //module->show();
     workspace->addDockWidget(Qt::RightDockWidgetArea, module);
 }
@@ -108,5 +108,9 @@ void MainWindow::loadDataFromFile() {
             values->append(map);
         }
     }
+}
+
+int MainWindow::getDataLen() {
+    return times->size();
 }
 

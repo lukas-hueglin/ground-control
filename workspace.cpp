@@ -1,10 +1,10 @@
 #include "workspace.h"
 
-Workspace::Workspace(QWidget *parent)
+Workspace::Workspace(MainWindow *parent)
     : QMainWindow{parent}
 {
-    // set parent
-    this->parent = qobject_cast<QMainWindow*>(parent);
+    // set mainWindow
+    mainWindow = parent;
 
     // enable dock nesting
     setDockNestingEnabled(true);

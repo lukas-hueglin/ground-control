@@ -2,11 +2,20 @@
 
 #include <QLabel>
 
-GraphEditor::GraphEditor(QWidget *parent)
+#include "module.h"
+
+
+GraphEditor::GraphEditor(Module *parent, MainWindow *mainWindow)
     : Editor{parent}
 {
+    // set parent
+    module = parent;
+
+    // set mainWindow
+    this->mainWindow = mainWindow;
+
     // create QLabel as viewport
-    QLabel *label = new QLabel(QString("Graph"), parent);
+    QLabel *label = new QLabel(QString("Graph"), module);
     label->setAlignment(Qt::AlignCenter);
 
     // set viewport

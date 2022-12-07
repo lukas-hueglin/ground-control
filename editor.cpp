@@ -7,13 +7,21 @@
 
 #include<QDebug>
 
+#include "module.h"
 
 
-Editor::Editor(QWidget *parent)
+
+Editor::Editor(Module *parent, MainWindow *mainWindow)
     : QWidget{parent}
 {
+    // set parent
+    module = parent;
+
+    // set mainWindow
+    this->mainWindow = mainWindow;
+
     // create QLabel as viewport
-    QLabel *label = new QLabel(QString("Empty"), parent);
+    QLabel *label = new QLabel(QString("Empty"), module);
     label->setAlignment(Qt::AlignCenter);
 
     // set viewport
@@ -67,4 +75,3 @@ void Editor::setupDrawer() {
         drawerAnim->start();
     });
 }
-

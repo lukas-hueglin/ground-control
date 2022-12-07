@@ -9,12 +9,17 @@
 
 #include <QParallelAnimationGroup>
 
+#include "mainwindow.h"
+
+
+class Module;
+
 
 class Editor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Editor(QWidget *parent = nullptr);
+    explicit Editor(Module *parent = nullptr, MainWindow *mainWindow = nullptr);
 
 public:
     QWidget* getViewport();
@@ -23,6 +28,9 @@ protected:
     void setupDrawer();
 
 protected:
+    Module *module;
+    MainWindow *mainWindow;
+
     QWidget *viewport;
 
     QGroupBox *drawer;

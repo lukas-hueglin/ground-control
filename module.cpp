@@ -3,15 +3,21 @@
 #include <QHBoxLayout>
 #include <QComboBox>
 #include <QPushButton>
+#include <QStatusBar>
+#include <QTimer>
 
 #include "grapheditor.h"
+#include "inputeditor.h"
 
 
-Module::Module(QWidget *parent)
+Module::Module(Workspace *parent, MainWindow *mainWindow)
     : QDockWidget{parent}
 {
-    // store parent
-    workspace = qobject_cast<QMainWindow*>(parent);
+    // set parent
+    workspace = parent;
+
+    // set mainWindow
+    this->mainWindow = mainWindow;
 
     // create new empty Editor
     editor = new Editor(this);
@@ -28,7 +34,7 @@ Module::Module(QWidget *parent)
     QComboBox *comboBox = new QComboBox(titlebar);
     comboBox->addItem(QString("Empty"));
     comboBox->addItem(QString("Graph Editor"));
-    comboBox->addItem(QString("Editor 2"));
+    comboBox->addItem(QString("Input Editor"));
     comboBox->addItem(QString("Editor 3"));
 
     titleLayout->addWidget(comboBox);
@@ -37,12 +43,12 @@ Module::Module(QWidget *parent)
     connect(comboBox, &QComboBox::currentIndexChanged, this, &Module::changeEditor);
 
     // add a QPushButton for splitting the module horizontally
-    QPushButton *splitButtonH = new QPushButton(QString("Split Module H"), titlebar);
+    QPushButton *splitButtonH = new QPushButton(QString("H"), titlebar);
     titleLayout->addWidget(splitButtonH);
     connect(splitButtonH, &QPushButton::pressed, this, &Module::splitModuleHorizontally);
 
     // add a QPushButton for splitting the module vertically
-    QPushButton *splitButtonV = new QPushButton(QString("Split Module V"), titlebar);
+    QPushButton *splitButtonV = new QPushButton(QString("V"), titlebar);
     titleLayout->addWidget(splitButtonV);
     connect(splitButtonV, &QPushButton::pressed, this, &Module::splitModuleVertically);
 
@@ -57,9 +63,12 @@ Module::Module(QWidget *parent)
     connect(closeButton, &QPushButton::pressed, this, &Module::close);
 
     // create QMainWindow and set as widget
-    mainWindow = new QMainWindow;
-    setWidget(mainWindow);
-    mainWindow->setCentralWidget(editor->getViewport());
+    moduleWindow = new QMainWindow;
+    setWidget(moduleWindow);
+    moduleWindow->setCentralWidget(editor->getViewport());
+
+    // set statusbar status
+    setStatusOK();
 }
 
 
@@ -67,12 +76,16 @@ Module::Module(QWidget *parent)
 void Module::changeEditor(const int index) {
     switch(index) {
         case 0:
-            editor = new Editor(this);
-            mainWindow->setCentralWidget(editor->getViewport());
+            editor = new Editor(this, mainWindow);
+            moduleWindow->setCentralWidget(editor->getViewport());
             break;
         case 1:
-            editor = new GraphEditor(this);
-            mainWindow->setCentralWidget(editor->getViewport());
+            editor = new GraphEditor(this, mainWindow);
+            moduleWindow->setCentralWidget(editor->getViewport());
+            break;
+        case 2:
+            editor = new InputEditor(this, mainWindow);
+            moduleWindow->setCentralWidget(editor->getViewport());
             break;
     }
 }
@@ -104,3 +117,32 @@ void Module::makeFloating() {
     setFloating(true);
 }
 
+
+// change colors of statusbar
+void Module::setStatusSuccess(QString message) {
+    moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(52, 186, 45);"));
+    moduleWindow->statusBar()->showMessage(QString(QChar(0x2713)) + QString("   ") + message);
+
+    // the success status will only be shown shortly
+    QTimer *timer = new QTimer(this);
+
+    // connect timeout
+    connect(timer, &QTimer::timeout, [this, message](){setStatusOK((message));});
+
+    timer->start(7000);
+}
+
+void Module::setStatusWorking(QString message) {
+    moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(40, 147, 247);"));
+    moduleWindow->statusBar()->showMessage(QString(QChar(0x2B6F)) + QString("   ") + message);
+}
+
+void Module::setStatusOK(QString message) {
+    moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(152, 14, 227);"));
+    moduleWindow->statusBar()->showMessage(QString(QChar(0x276E)) + QString(QChar(0x002F)) + QString(QChar(0x276F)) + QString("   ") + message);
+}
+
+void Module::setStatusFail(QString message) {
+    moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(201, 26, 26);"));
+    moduleWindow->statusBar()->showMessage(QString(QChar(0x2A2F)) + QString("   ") + message);
+}

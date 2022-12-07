@@ -22,9 +22,8 @@ public:
 
 public:
     void setFile(QFile *f);
-
-public slots:
     void loadDataFromFile();
+    int getDataLen();
 
 private slots:
     void on_actionNew_Editor_triggered();

@@ -2,16 +2,16 @@
 #define WORKSPACE_H
 
 #include <QMainWindow>
-
+#include "mainwindow.h"
 
 class Workspace : public QMainWindow
 {
     Q_OBJECT
 public:
-    explicit Workspace(QWidget *parent = nullptr);
+    explicit Workspace(MainWindow *parent = nullptr);
 
 private:
-    QMainWindow *parent;
+    MainWindow *mainWindow;
 
 };
 

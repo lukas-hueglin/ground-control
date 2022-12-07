@@ -11,6 +11,7 @@ CONFIG += c++17
 SOURCES += \
     editor.cpp \
     grapheditor.cpp \
+    inputeditor.cpp \
     main.cpp \
     mainwindow.cpp \
     module.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 HEADERS += \
     editor.h \
     grapheditor.h \
+    inputeditor.h \
     mainwindow.h \
     module.h \
     viewport.h \
