@@ -3,6 +3,7 @@
 
 #include "workspace.h"
 #include "module.h"
+#include "editor.h"
 
 #include <QDebug>
 
@@ -29,6 +30,12 @@ MainWindow::MainWindow(QWidget *parent)
     // create QLists
     times = new QList<QDateTime*>;
     values = new QList<QMap<QString, float>*>;
+
+    // set dataLen
+    dataLen = 0;
+
+    // set time;
+    time = 0;
 }
 
 MainWindow::~MainWindow()
@@ -51,6 +58,7 @@ void MainWindow::on_actionNew_Editor_triggered()
     Module *module = new Module(workspace, this);
     //module->show();
     workspace->addDockWidget(Qt::RightDockWidgetArea, module);
+    workspace->addModule(module);
 }
 
 void MainWindow::loadDataFromFile() {
@@ -107,10 +115,39 @@ void MainWindow::loadDataFromFile() {
 
             values->append(map);
         }
+
+        dataLen = times->size();
     }
 }
 
 int MainWindow::getDataLen() {
-    return times->size();
+    return dataLen;
 }
 
+void MainWindow::updateTime(int t) {
+    time = t;
+
+    // get active workspace
+    Workspace *workspace = qobject_cast<Workspace*>(tabWidget->currentWidget());
+
+    QList<Module*>* modules = workspace->getModules();
+
+    for (Module* m : *modules) {
+        m->getEditor()->updateTime(time);
+    }
+}
+
+
+QDateTime* MainWindow::getDateTime(int i){
+    if (!times->empty()){
+        return times->at(i);
+    }
+    return nullptr;
+}
+
+float MainWindow::getValue(int i, QString key){
+    if (!values->empty()) {
+        return values->at(i)->value(key);
+    }
+    return 0;
+}

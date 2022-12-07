@@ -27,8 +27,11 @@ Editor::Editor(Module *parent, MainWindow *mainWindow)
     // set viewport
     viewport = label;
 
-    // st drawer up
+    // set drawer up
     setupDrawer();
+
+    // set time
+    time = 0;
 }
 
 QWidget* Editor::getViewport() {
@@ -75,3 +78,6 @@ void Editor::setupDrawer() {
         drawerAnim->start();
     });
 }
+
+
+void Editor::updateTime(int t){}

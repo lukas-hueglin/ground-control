@@ -24,6 +24,8 @@ public:
 public:
     QWidget* getViewport();
 
+    virtual void updateTime(int t);
+
 protected:
     void setupDrawer();
 
@@ -36,6 +38,8 @@ protected:
     QGroupBox *drawer;
     QToolButton *drawerButton;
     QParallelAnimationGroup *drawerAnim;
+
+    int time;
 
 };
 

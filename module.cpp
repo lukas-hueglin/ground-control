@@ -8,6 +8,7 @@
 
 #include "grapheditor.h"
 #include "inputeditor.h"
+#include "timelineeditor.h"
 
 
 Module::Module(Workspace *parent, MainWindow *mainWindow)
@@ -35,7 +36,7 @@ Module::Module(Workspace *parent, MainWindow *mainWindow)
     comboBox->addItem(QString("Empty"));
     comboBox->addItem(QString("Graph Editor"));
     comboBox->addItem(QString("Input Editor"));
-    comboBox->addItem(QString("Editor 3"));
+    comboBox->addItem(QString("Timeline Editor"));
 
     titleLayout->addWidget(comboBox);
 
@@ -87,6 +88,10 @@ void Module::changeEditor(const int index) {
             editor = new InputEditor(this, mainWindow);
             moduleWindow->setCentralWidget(editor->getViewport());
             break;
+        case 3:
+            editor = new TimelineEditor(this, mainWindow);
+            moduleWindow->setCentralWidget(editor->getViewport());
+            break;
     }
 }
 
@@ -95,7 +100,9 @@ void Module::changeEditor(const int index) {
 void Module::splitModuleHorizontally() {
     // let the parent workspace split the Modules
     if (workspace != nullptr){
-        workspace->splitDockWidget(this, new Module(workspace), Qt::Horizontal);
+        Module* newModule = new Module(workspace, mainWindow);
+        workspace->splitDockWidget(this, newModule, Qt::Horizontal);
+        workspace->addModule(newModule);
     } else {
 
     }
@@ -105,7 +112,9 @@ void Module::splitModuleHorizontally() {
 void Module::splitModuleVertically() {
     // let the parent workspace split the Modules
     if (workspace != nullptr){
-        workspace->splitDockWidget(this, new Module(workspace), Qt::Vertical);
+        Module* newModule = new Module(workspace, mainWindow);
+        workspace->splitDockWidget(this, newModule, Qt::Vertical);
+        workspace->addModule(newModule);
     } else {
 
     }
@@ -145,4 +154,9 @@ void Module::setStatusOK(QString message) {
 void Module::setStatusFail(QString message) {
     moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(201, 26, 26);"));
     moduleWindow->statusBar()->showMessage(QString(QChar(0x2A2F)) + QString("   ") + message);
+}
+
+
+Editor* Module::getEditor(){
+    return editor;
 }

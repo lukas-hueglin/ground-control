@@ -15,6 +15,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     module.cpp \
+    timelineeditor.cpp \
     viewport.cpp \
     workspace.cpp
 
@@ -24,6 +25,7 @@ HEADERS += \
     inputeditor.h \
     mainwindow.h \
     module.h \
+    timelineeditor.h \
     viewport.h \
     workspace.h
 

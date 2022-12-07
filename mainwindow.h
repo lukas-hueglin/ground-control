@@ -25,6 +25,12 @@ public:
     void loadDataFromFile();
     int getDataLen();
 
+    QDateTime* getDateTime(int i);
+    float getValue(int i, QString key);
+
+public slots:
+    void updateTime(int t);
+
 private slots:
     void on_actionNew_Editor_triggered();
 
@@ -37,5 +43,8 @@ private:
     QList<QDateTime*> *times;
 
     QList<QMap<QString, float>*> *values;
+
+    int dataLen;
+    int time;
 };
 #endif // MAINWINDOW_H

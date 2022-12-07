@@ -53,6 +53,9 @@ void InputEditor::browse() {
         mainWindow->loadDataFromFile();
     }
 
+    // Force time update to fully initialize timelines etc.
+    mainWindow->updateTime(0);
+
     module->setStatusSuccess(QString("Elapsed Time: "+QString::number(timer.elapsed()))+QString(" ms")+ QString(" | ") + QString::number(mainWindow->getDataLen())+" Datapoints");
     fileSelection->setText(filePath.split("/").last());
 }
