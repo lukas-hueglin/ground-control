@@ -20,6 +20,9 @@ public:
 private:
     void setupTimeline();
 
+private slots:
+    void playButtonPressed(bool toggled);
+
 private:
     QPushButton *toBeginButton;
     QPushButton *backwardButton;

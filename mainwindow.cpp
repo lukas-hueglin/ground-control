@@ -5,7 +5,7 @@
 #include "module.h"
 #include "editor.h"
 
-#include <QDebug>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -36,6 +36,9 @@ MainWindow::MainWindow(QWidget *parent)
 
     // set time;
     time = 0;
+
+    // set play
+    play = false;
 }
 
 MainWindow::~MainWindow()
@@ -150,4 +153,27 @@ float MainWindow::getValue(int i, QString key){
         return values->at(i)->value(key);
     }
     return 0;
+}
+
+
+void MainWindow::playTime(bool start){
+    if (play || start){
+        QDateTime *t1 = getDateTime(time);
+        QDateTime *t2 = getDateTime(time+1);
+
+        int ms = t1->daysTo(*t2)*1000*60*60*24 + t1->time().msecsTo(t2->time());
+
+        // update time
+        updateTime(time+1);
+
+        // set play
+        play = true;
+
+        // create Timer
+        QTimer::singleShot(ms, [this](){playTime(false);});
+    }
+}
+
+void MainWindow::pauseTime() {
+    play = false;
 }

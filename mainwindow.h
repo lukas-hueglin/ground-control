@@ -30,6 +30,8 @@ public:
 
 public slots:
     void updateTime(int t);
+    void playTime(bool start);
+    void pauseTime();
 
 private slots:
     void on_actionNew_Editor_triggered();
@@ -46,5 +48,7 @@ private:
 
     int dataLen;
     int time;
+
+    bool play;
 };
 #endif // MAINWINDOW_H

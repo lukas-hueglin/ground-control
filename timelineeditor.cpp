@@ -61,6 +61,8 @@ void TimelineEditor::setupTimeline(){
     layout->addWidget(backwardButton, 0, 1, 1, 1);
 
     playButton = new QPushButton(QString(QChar(0x2BC8)), viewport);
+    playButton->setCheckable(true);
+    playButton->setChecked(false);
     layout->addWidget(playButton, 0, 2, 1, 2);
 
     forwardButton = new QPushButton(QString(QChar(0x276F))+QString(QChar(0x276F)), viewport);
@@ -69,6 +71,14 @@ void TimelineEditor::setupTimeline(){
     toEndButton = new QPushButton(QString(QChar(0x276F))+QString(QChar(0x2B25)), viewport);
     layout->addWidget(toEndButton, 0, 5, 1, 1);
 
+    // connect QPushButtons
+    connect(playButton, &QPushButton::toggled, this, &TimelineEditor::playButtonPressed);
+
+    connect(toBeginButton, &QPushButton::pressed, [this](){mainWindow->updateTime(0);});
+    connect(backwardButton, &QPushButton::pressed, [this](){mainWindow->updateTime(fmax(time-1, 0));});
+    connect(forwardButton, &QPushButton::pressed, [this](){mainWindow->updateTime(fmin(time+1, mainWindow->getDataLen()-1));});
+    connect(toEndButton, &QPushButton::pressed, [this](){mainWindow->updateTime(mainWindow->getDataLen()-1);});
+
     // create QSlider
     timeline = new QSlider(Qt::Orientation::Horizontal, viewport);
     timeline->setTickPosition(QSlider::NoTicks);
@@ -76,12 +86,13 @@ void TimelineEditor::setupTimeline(){
     timeline->setSliderPosition(0);
     layout->addWidget(timeline, 1, 0, 1, 20);
 
+    // connect QSlider
+    connect(timeline, &QSlider::valueChanged, mainWindow, &MainWindow::updateTime);
+
     // create QLabel
     timeIndicator = new QLabel(mainWindow->getDateTime(0)->toString(), viewport);
     layout->addWidget(timeIndicator, 0, 7, 1, 5);
 
-    // connect QSlider
-    connect(timeline, &QSlider::valueChanged, mainWindow, &MainWindow::updateTime);
 }
 
 
@@ -95,4 +106,16 @@ void TimelineEditor::updateTime(int t){
 
     time = t;
     timeIndicator->setText(mainWindow->getDateTime(time)->toString());
+    timeline->setValue(time);
+}
+
+void TimelineEditor::playButtonPressed(bool toggled) {
+    if (toggled){
+        mainWindow->playTime(true);
+        playButton->setText(QString(QChar(0x2016)));
+    }
+    else{
+        mainWindow->pauseTime();
+        playButton->setText(QString(QChar(0x2BC8)));
+    }
 }
