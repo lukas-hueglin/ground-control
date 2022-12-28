@@ -21,6 +21,9 @@ GraphEditor::GraphEditor(Module *parent, MainWindow *mainWindow)
     // set viewport
     viewport = label;
 
+    // add viewport to container
+    container->addWidget(viewport);
+
     // set drawer up
     setupDrawer();
 }

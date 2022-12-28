@@ -27,6 +27,7 @@ public:
 
     QDateTime* getDateTime(int i);
     float getValue(int i, QString key);
+    QList<QString>* getKeys();
 
 public slots:
     void updateTime(int t);
@@ -43,8 +44,8 @@ private:
     QFile *file;
 
     QList<QDateTime*> *times;
-
     QList<QMap<QString, float>*> *values;
+    QList<QString> *keys;
 
     int dataLen;
     int time;

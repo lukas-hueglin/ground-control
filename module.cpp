@@ -9,6 +9,7 @@
 #include "grapheditor.h"
 #include "inputeditor.h"
 #include "timelineeditor.h"
+#include "dashboardeditor.h"
 
 
 Module::Module(Workspace *parent, MainWindow *mainWindow)
@@ -37,6 +38,7 @@ Module::Module(Workspace *parent, MainWindow *mainWindow)
     comboBox->addItem(QString("Graph Editor"));
     comboBox->addItem(QString("Input Editor"));
     comboBox->addItem(QString("Timeline Editor"));
+    comboBox->addItem(QString("Dashboard Editor"));
 
     titleLayout->addWidget(comboBox);
 
@@ -66,7 +68,7 @@ Module::Module(Workspace *parent, MainWindow *mainWindow)
     // create QMainWindow and set as widget
     moduleWindow = new QMainWindow;
     setWidget(moduleWindow);
-    moduleWindow->setCentralWidget(editor->getViewport());
+    moduleWindow->setCentralWidget(editor);
 
     // set statusbar status
     setStatusOK();
@@ -78,19 +80,23 @@ void Module::changeEditor(const int index) {
     switch(index) {
         case 0:
             editor = new Editor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor->getViewport());
+            moduleWindow->setCentralWidget(editor);
             break;
         case 1:
             editor = new GraphEditor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor->getViewport());
+            moduleWindow->setCentralWidget(editor);
             break;
         case 2:
             editor = new InputEditor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor->getViewport());
+            moduleWindow->setCentralWidget(editor);
             break;
         case 3:
             editor = new TimelineEditor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor->getViewport());
+            moduleWindow->setCentralWidget(editor);
+            break;
+        case 4:
+            editor = new DashboardEditor(this, mainWindow);
+            moduleWindow->setCentralWidget(editor);
             break;
     }
 }

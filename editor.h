@@ -4,6 +4,8 @@
 #include <QDockWidget>
 #include <QMainWindow>
 
+#include <QHBoxLayout>
+
 #include <QGroupBox>
 #include <QToolButton>
 
@@ -32,6 +34,8 @@ protected:
 protected:
     Module *module;
     MainWindow *mainWindow;
+
+    QHBoxLayout *container;
 
     QWidget *viewport;
 

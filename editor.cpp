@@ -20,18 +20,24 @@ Editor::Editor(Module *parent, MainWindow *mainWindow)
     // set mainWindow
     this->mainWindow = mainWindow;
 
+    // create QHBoxLayout
+    container = new QHBoxLayout;
+    setLayout(container);
+
     // create QLabel as viewport
-    QLabel *label = new QLabel(QString("Empty"), module);
-    label->setAlignment(Qt::AlignCenter);
+    //QLabel *label = new QLabel(QString("Empty"), module);
+    //label->setAlignment(Qt::AlignCenter);
 
     // set viewport
-    viewport = label;
+    //viewport = label;
 
-    // set drawer up
-    setupDrawer();
+    // add viewport to layout
+    //container->addWidget(viewport);
 
     // set time
     time = 0;
+
+    //setupDrawer(); // Disable Drawer
 }
 
 QWidget* Editor::getViewport() {
@@ -40,36 +46,36 @@ QWidget* Editor::getViewport() {
 
 void Editor::setupDrawer() {
     // create QGroupBox
-    drawer = new QGroupBox(QString("Settings"), viewport);
+    drawer = new QGroupBox(QString("Settings"), this);
+
+    // add drawer to layout
+    container->insertWidget(0, drawer);
 
     // create QToolButton
-    drawerButton = new QToolButton(viewport);
+    drawerButton = new QToolButton(this);
     drawerButton->setArrowType(Qt::ArrowType::RightArrow);
     drawerButton->setCheckable(true);
     drawerButton->setChecked(false);
 
-    // create QPropertyAnimations for QGroupWidget and QToolButton
-    QPropertyAnimation *groupAnim = new QPropertyAnimation(drawer, "pos", viewport);
-    QPropertyAnimation *buttonAnim = new QPropertyAnimation(drawerButton, "pos", viewport);
+    // add drawer to layout
+    container->insertWidget(1, drawerButton, 0, Qt::AlignTop);
+
+    // create QPropertyAnimations for QGroupWidget
+    QPropertyAnimation *groupAnim = new QPropertyAnimation(drawer, "maximumWidth", viewport);
 
     // set position and size of widget and drawerButton
-    drawer->setGeometry(-200, 0, 200, 500);
-    drawerButton->setGeometry(0, 0, 15, 20);
+    drawer->setMaximumWidth(0);
+    drawerButton->setFixedSize(15, 20);
 
     // set settings for groupAnim
     groupAnim->setDuration(200);
-    groupAnim->setStartValue(QPoint(-drawer->width(), 0));
-    groupAnim->setEndValue(QPoint(0, 0));
-
-    // set settings for buttonAnim
-    buttonAnim->setDuration(200);
-    buttonAnim->setStartValue(QPoint(0, 0));
-    buttonAnim->setEndValue(QPoint(drawer->width(), 0));
+    groupAnim->setStartValue(0);
+    groupAnim->setEndValue(400);
 
     // create QParallelAnimationGroup
     drawerAnim = new QParallelAnimationGroup;
     drawerAnim->addAnimation(groupAnim);
-    drawerAnim->addAnimation(buttonAnim);
+
 
     // connect drawerButton to animations
     connect(drawerButton, &QToolButton::clicked, [this](const bool checked) {

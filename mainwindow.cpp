@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
     // create QLists
     times = new QList<QDateTime*>;
     values = new QList<QMap<QString, float>*>;
+    keys = new QList<QString>;
 
     // set dataLen
     dataLen = 0;
@@ -72,12 +73,11 @@ void MainWindow::loadDataFromFile() {
             return;
         }
         // read first line and get headers
-        QList<QString> headers;
         QString firstLine = file->readLine();
         firstLine = firstLine.left(firstLine.size()-2);
 
         for (QString str : firstLine.split(",")){
-            headers.append(str);
+            keys->append(str);
         }
 
         // load all lines
@@ -93,9 +93,9 @@ void MainWindow::loadDataFromFile() {
             QMap<QString, float> *map = new QMap<QString, float>;
 
             // for every col
-            for (int i = 0; i < headers.size(); ++i){
+            for (int i = 0; i < keys->size(); ++i){
                 // if col is time
-                if (headers.at(i) == QString("time")) {
+                if (keys->at(i) == QString("time")) {
                     QString date = elements.at(i).split(" ").at(0);
                     QString time = elements.at(i).split(" ").at(1);
 
@@ -112,7 +112,7 @@ void MainWindow::loadDataFromFile() {
                 }
                 // else if it is not time
                 else{
-                    map->insert(headers.at(i), elements.at(i).toFloat());
+                    map->insert(keys->at(i), elements.at(i).toFloat());
                 }
             }
 
@@ -164,7 +164,7 @@ void MainWindow::playTime(bool start){
         int ms = t1->daysTo(*t2)*1000*60*60*24 + t1->time().msecsTo(t2->time());
 
         // update time
-        updateTime(time+1);
+        updateTime(fmin(time+1, getDataLen()-1));
 
         // set play
         play = true;
@@ -176,4 +176,8 @@ void MainWindow::playTime(bool start){
 
 void MainWindow::pauseTime() {
     play = false;
+}
+
+QList<QString>* MainWindow::getKeys() {
+    return keys;
 }

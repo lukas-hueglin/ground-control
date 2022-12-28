@@ -17,6 +17,9 @@ TimelineEditor::TimelineEditor(Module *parent, MainWindow *mainWindow)
     // create QWidget as viewport
     viewport = new QWidget(module);
 
+    // add viewport to container
+    container->addWidget(viewport);
+
     // create QGridLayout
     QGridLayout *layout = new QGridLayout(viewport);
     viewport->setLayout(layout);

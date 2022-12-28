@@ -20,6 +20,9 @@ InputEditor::InputEditor(Module *parent, MainWindow *mainWindow)
     // create QWidget as viewport
     viewport = new QWidget(module);
 
+    // add viewport to container
+    container->addWidget(viewport);
+
     // add QGridLayout to viewport
     QGridLayout *layout = new QGridLayout(viewport);
     viewport->setLayout(layout);
@@ -34,7 +37,6 @@ InputEditor::InputEditor(Module *parent, MainWindow *mainWindow)
 
     connect(browseButton, &QPushButton::pressed, this, &InputEditor::browse);
 
-    //setupDrawer(); // Disable Drawer
 }
 
 void InputEditor::browse() {
