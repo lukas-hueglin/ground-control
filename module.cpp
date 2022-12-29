@@ -139,12 +139,7 @@ void Module::setStatusSuccess(QString message) {
     m_moduleWindow->statusBar()->showMessage(QString(QChar(0x2713)) + QString("   ") + message);
 
     // the success status will only be shown shortly
-    QTimer *timer = new QTimer(this);
-
-    // connect timeout
-    connect(timer, &QTimer::timeout, [this, message](){setStatusOK((message));});
-
-    timer->start(7000);
+    QTimer::singleShot(7000, [this](){setStatusOK(QString(""));});
 }
 
 void Module::setStatusWorking(QString message) {

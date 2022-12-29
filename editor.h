@@ -24,6 +24,12 @@ public:
 protected:
     void setupDrawer();
 
+signals:
+    void onStatusChangeSuccess(QString message = QString());
+    void onStatusChangeWorking(QString message = QString());
+    void onStatusChangeOK(QString message = QString());
+    void onStatusChangeFail(QString message = QString());
+
 protected:
     DataFrame *m_dataFrame;
 

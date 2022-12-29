@@ -16,14 +16,14 @@ public:
 
 
 public:
+    Editor* getEditor();
+
+public slots:
     void setStatusSuccess(QString message = QString());
     void setStatusWorking(QString message = QString());
     void setStatusOK(QString message = QString());
     void setStatusFail(QString message = QString());
 
-    Editor* getEditor();
-
-public slots:
     void changeEditor(const int index);
     void splitModuleHorizontally();
     void splitModuleVertically();

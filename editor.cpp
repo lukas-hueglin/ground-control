@@ -5,6 +5,8 @@
 #include <QPushButton>
 #include <QLabel>
 
+#include "module.h"
+
 
 Editor::Editor(DataFrame *p_dataFrame, QWidget *parent)
     : QWidget{parent}
@@ -16,17 +18,13 @@ Editor::Editor(DataFrame *p_dataFrame, QWidget *parent)
     m_container = new QHBoxLayout;
     setLayout(m_container);
 
-    // create QLabel as viewport
-    //QLabel *label = new QLabel(QString("Empty"), module);
-    //label->setAlignment(Qt::AlignCenter);
+    // connect statusbar
+    Module *module = qobject_cast<Module*>(parent);
 
-    // set viewport
-    //viewport = label;
-
-    // add viewport to layout
-    //container->addWidget(viewport);
-
-    //setupDrawer(); // Disable Drawer
+    connect(this, &Editor::onStatusChangeSuccess, module, &Module::setStatusSuccess);
+    connect(this, &Editor::onStatusChangeWorking, module, &Module::setStatusWorking);
+    connect(this, &Editor::onStatusChangeOK, module, &Module::setStatusOK);
+    connect(this, &Editor::onStatusChangeFail, module, &Module::setStatusFail);
 }
 
 QWidget* Editor::getViewport() {

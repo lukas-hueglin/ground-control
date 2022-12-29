@@ -32,23 +32,24 @@ InputEditor::InputEditor(DataFrame *p_dataFrame, QWidget *parent)
 }
 
 void InputEditor::browse() {
-    QString filePath = QFileDialog::getOpenFileName(m_viewport, QString("Select Log File"), QString("*.csv"));
+    // set statusbar to working
+    onStatusChangeWorking(QString("Chose log file"));
 
-    //module->setStatusWorking(QString("Loading: "+filePath));
+    QString filePath = QFileDialog::getOpenFileName(m_viewport, QString("Select Log File"), QString("*.csv"));
 
     // create timer
     QElapsedTimer timer;
 
     if (!filePath.isEmpty()) {
-        m_dataFrame->setFile(new QFile(filePath));
-
         // start timer and loading
         timer.start();
+
+        m_dataFrame->setFile(new QFile(filePath));
+
+        onStatusChangeSuccess(QString("Elapsed Time: "+QString::number(timer.elapsed()))+QString(" ms")+ QString(" | ") + QString::number(m_dataFrame->getSize())+" Datapoints");
+        fileSelection->setText(filePath.split("/").last());
     }
     else{
-
+        onStatusChangeFail(QString("Couln't load log file!"));
     }
-
-    //module->setStatusSuccess(QString("Elapsed Time: "+QString::number(timer.elapsed()))+QString(" ms")+ QString(" | ") + QString::number(mainWindow->getDataLen())+" Datapoints");
-    fileSelection->setText(filePath.split("/").last());
 }

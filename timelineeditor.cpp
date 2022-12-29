@@ -82,7 +82,14 @@ void TimelineEditor::setupTimeline(){
 
     // connect QPushButton Feedback
     connect(m_dataFrame, &DataFrame::onPlayStateChanged, [this](bool p_play){
-        playButton->setText(QString(p_play ? QChar(0x2016) : QChar(0x2BC8)));
+        if (p_play) {
+            playButton->setText(QString(QChar(0x2016)));
+            onStatusChangeWorking(QString("Playing"));
+        } else {
+            playButton->setText(QString(QChar(0x2BC8)));
+            onStatusChangeOK(QString(""));
+        }
+
     });
 
     // create QSlider
