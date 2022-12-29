@@ -8,11 +8,14 @@
 #include <QColorDialog>
 #include <QDebug>
 
-#include "module.h"
+#include <QMainWindow>
 
-DashboardLabel::DashboardLabel(QString strLabel, QString strValue, QWidget *parent)
+DashboardLabel::DashboardLabel(DataFrame *p_dataFrame, QString strLabel, QString strValue, QWidget *parent)
     : QDockWidget(parent)
 {
+    // set dataFrame
+    m_dataFrame = p_dataFrame;
+
     // set features of QDockWidget
     setFeatures(QDockWidget::NoDockWidgetFeatures);
     setFeatures(QDockWidget::DockWidgetMovable);
@@ -25,6 +28,11 @@ DashboardLabel::DashboardLabel(QString strLabel, QString strValue, QWidget *pare
     label->setAlignment(Qt::AlignCenter);
     value->setAlignment(Qt::AlignCenter);
 
+    // connect Label feedback
+    connect(m_dataFrame, &DataFrame::onTimeChanged, [this](){
+        value->setText(QString::number(m_dataFrame->getValue(label->text())));
+    });
+
     // set titlebar
     setTitleBarWidget(label);
 
@@ -33,28 +41,22 @@ DashboardLabel::DashboardLabel(QString strLabel, QString strValue, QWidget *pare
 }
 
 
-DashboardEditor::DashboardEditor(Module *parent, MainWindow *mainWindow)
-    : Editor{parent}
+DashboardEditor::DashboardEditor(DataFrame *p_dataFrame, QWidget *parent)
+    : Editor{p_dataFrame, parent}
 {
-    // set parent
-    module = parent;
-
-    // set mainWindow
-    this->mainWindow = mainWindow;
-
     // set QMaps
     checkBoxes = new QMap<QString, QCheckBox*>;
     colorButtons = new QMap<QString, QPushButton*>;
     labels = new QMap<QString, DashboardLabel*>;
 
     // create QMainWindow as viewport
-    viewport = new QMainWindow(module);
+    m_viewport = new QMainWindow(parent);
 
     // add viewport to container
-    container->addWidget(viewport);
+    m_container->addWidget(m_viewport);
 
     // check if log file is already loaded
-    if (mainWindow->getDateTime(0) != nullptr){
+    if (m_dataFrame->isAlreadySetup()){
         setupDrawer();
         setupDashboard();
 
@@ -63,15 +65,23 @@ DashboardEditor::DashboardEditor(Module *parent, MainWindow *mainWindow)
     }
     else {
         // create QLabel as viewport
-        failLabel = new QLabel(QString("Load a log file first!"), viewport);
+        failLabel = new QLabel(QString("Load a log file first!"), m_viewport);
         failLabel->setAlignment(Qt::AlignCenter);
 
         // set central widget
-        qobject_cast<QMainWindow*>(viewport)->setCentralWidget(failLabel);
+        qobject_cast<QMainWindow*>(m_viewport)->setCentralWidget(failLabel);
 
         // set properlySetup
         properlySetup = false;
     }
+
+    // connect reload of log file
+    connect(m_dataFrame, &DataFrame::onFileChanged, [this](){
+        delete failLabel;
+        setupDrawer();
+        setupDashboard();
+        properlySetup = true;
+    });
 }
 
 void DashboardEditor::setupDrawer() {
@@ -79,15 +89,15 @@ void DashboardEditor::setupDrawer() {
     Editor::setupDrawer();
 
     // create QVBoxLayout
-    QGridLayout *drawerLayout = new QGridLayout(drawer);
-    drawer->setLayout(drawerLayout);
+    QGridLayout *drawerLayout = new QGridLayout(m_drawer);
+    m_drawer->setLayout(drawerLayout);
 
     // counter variable for row
     int row = 0;
 
-    for(QString key : *mainWindow->getKeys()){
+    for(QString key : *m_dataFrame->getKeys()){
         if (key != QString("time")) {
-            QCheckBox *checkBox = new QCheckBox(key, drawer);
+            QCheckBox *checkBox = new QCheckBox(key, m_drawer);
             checkBox->setCheckState(Qt::Checked);
 
             QPushButton *colorButton = new QPushButton;
@@ -120,24 +130,25 @@ void DashboardEditor::setupDrawer() {
 }
 
 void DashboardEditor::setupDashboard() {
+    // get count of checkboxes
+    int n = checkBoxes->size();
+    int rows = ceil(n/3)+1;
+
     // counting variable
     int i = 0;
 
     // create new DashboardLabels for each checked QCheckbox
     for (QCheckBox *checkBox : *checkBoxes) {
         if (checkBox->isChecked()) {
-            DashboardLabel *l = new DashboardLabel(checkBox->text(), QString::number(mainWindow->getValue(time, checkBox->text())), viewport);
+            DashboardLabel *l = new DashboardLabel(m_dataFrame, checkBox->text(), QString::number(m_dataFrame->getValue(checkBox->text())), m_viewport);
 
-            // set dock widget area
-            Qt::DockWidgetArea area;
-            if (i % 2 == 0) {
-                area = Qt::LeftDockWidgetArea;
+            if (i < rows) {
+                qobject_cast<QMainWindow*>(m_viewport)->addDockWidget(Qt::RightDockWidgetArea, l);
             }
             else {
-                area = Qt::RightDockWidgetArea;
+                qobject_cast<QMainWindow*>(m_viewport)->splitDockWidget(labels->find(labels->keys().at(i%rows)).value(), l, Qt::Horizontal);
             }
 
-            qobject_cast<QMainWindow*>(viewport)->addDockWidget(area, l);
             labels->insert(checkBox->text(), l);
             ++i;
         }
@@ -149,36 +160,15 @@ void DashboardEditor::setupDashboard() {
 
 void DashboardEditor::toggleLabel(QString key, bool checked){
     if (checked){
-        DashboardLabel *l = new DashboardLabel(key, QString::number(mainWindow->getValue(time, key)), viewport);
-        qobject_cast<QMainWindow*>(viewport)->addDockWidget(Qt::BottomDockWidgetArea, l);
+        DashboardLabel *l = new DashboardLabel(m_dataFrame, key, QString::number(m_dataFrame->getValue(key)), m_viewport);
+        qobject_cast<QMainWindow*>(m_viewport)->addDockWidget(Qt::BottomDockWidgetArea, l);
 
         labels->insert(key, l);
     }
     else {
         DashboardLabel *l = labels->find(key).value();
 
-        qobject_cast<QMainWindow*>(viewport)->removeDockWidget(l);
+        qobject_cast<QMainWindow*>(m_viewport)->removeDockWidget(l);
         delete l;
-    }
-}
-
-void DashboardEditor::updateTime(int t) {
-    if (!properlySetup){
-        // delete QLayout and failLabel
-        delete drawer->layout();
-        delete failLabel;
-
-        setupDrawer();
-        setupDashboard();
-
-        // set properlySetup
-        properlySetup = true;
-    }
-
-    time = t;
-
-    // set all labels of QCheckBoxes
-    for (DashboardLabel *l : *labels) {
-        l->value->setText(QString::number(mainWindow->getValue(time, l->label->text())));
     }
 }

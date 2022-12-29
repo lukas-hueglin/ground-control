@@ -12,17 +12,17 @@
 #include "dashboardeditor.h"
 
 
-Module::Module(Workspace *parent, MainWindow *mainWindow)
+Module::Module(DataFrame *p_dataFrame, Workspace *parent)
     : QDockWidget{parent}
 {
-    // set parent
-    workspace = parent;
+    // set dataFrame
+    m_dataFrame = p_dataFrame;
 
-    // set mainWindow
-    this->mainWindow = mainWindow;
+    // set parent
+    m_workspace = parent;
 
     // create new empty Editor
-    editor = new Editor(this);
+    m_editor = new Editor(m_dataFrame, this);
 
     // create the titlebar
     QWidget *titlebar = new QWidget(this);
@@ -66,9 +66,9 @@ Module::Module(Workspace *parent, MainWindow *mainWindow)
     connect(closeButton, &QPushButton::pressed, this, &Module::close);
 
     // create QMainWindow and set as widget
-    moduleWindow = new QMainWindow;
-    setWidget(moduleWindow);
-    moduleWindow->setCentralWidget(editor);
+    m_moduleWindow = new QMainWindow;
+    setWidget(m_moduleWindow);
+    m_moduleWindow->setCentralWidget(m_editor);
 
     // set statusbar status
     setStatusOK();
@@ -79,24 +79,24 @@ Module::Module(Workspace *parent, MainWindow *mainWindow)
 void Module::changeEditor(const int index) {
     switch(index) {
         case 0:
-            editor = new Editor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor);
+            m_editor = new Editor(m_dataFrame, this);
+            m_moduleWindow->setCentralWidget(m_editor);
             break;
         case 1:
-            editor = new GraphEditor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor);
+            m_editor = new GraphEditor(m_dataFrame, this);
+            m_moduleWindow->setCentralWidget(m_editor);
             break;
         case 2:
-            editor = new InputEditor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor);
+            m_editor = new InputEditor(m_dataFrame, this);
+            m_moduleWindow->setCentralWidget(m_editor);
             break;
         case 3:
-            editor = new TimelineEditor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor);
+            m_editor = new TimelineEditor(m_dataFrame, this);
+            m_moduleWindow->setCentralWidget(m_editor);
             break;
         case 4:
-            editor = new DashboardEditor(this, mainWindow);
-            moduleWindow->setCentralWidget(editor);
+            m_editor = new DashboardEditor(m_dataFrame, this);
+            m_moduleWindow->setCentralWidget(m_editor);
             break;
     }
 }
@@ -105,10 +105,10 @@ void Module::changeEditor(const int index) {
 // splits the module into two modules, these are horizontally arranged
 void Module::splitModuleHorizontally() {
     // let the parent workspace split the Modules
-    if (workspace != nullptr){
-        Module* newModule = new Module(workspace, mainWindow);
-        workspace->splitDockWidget(this, newModule, Qt::Horizontal);
-        workspace->addModule(newModule);
+    if (m_workspace != nullptr){
+        Module* newModule = new Module(m_dataFrame, m_workspace);
+        m_workspace->splitDockWidget(this, newModule, Qt::Horizontal);
+        m_workspace->addModule(newModule);
     } else {
 
     }
@@ -117,10 +117,10 @@ void Module::splitModuleHorizontally() {
 // splits the module into two modules, these are vertically arranged
 void Module::splitModuleVertically() {
     // let the parent workspace split the Modules
-    if (workspace != nullptr){
-        Module* newModule = new Module(workspace, mainWindow);
-        workspace->splitDockWidget(this, newModule, Qt::Vertical);
-        workspace->addModule(newModule);
+    if (m_workspace != nullptr){
+        Module* newModule = new Module(m_dataFrame, m_workspace);
+        m_workspace->splitDockWidget(this, newModule, Qt::Vertical);
+        m_workspace->addModule(newModule);
     } else {
 
     }
@@ -135,8 +135,8 @@ void Module::makeFloating() {
 
 // change colors of statusbar
 void Module::setStatusSuccess(QString message) {
-    moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(52, 186, 45);"));
-    moduleWindow->statusBar()->showMessage(QString(QChar(0x2713)) + QString("   ") + message);
+    m_moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(52, 186, 45);"));
+    m_moduleWindow->statusBar()->showMessage(QString(QChar(0x2713)) + QString("   ") + message);
 
     // the success status will only be shown shortly
     QTimer *timer = new QTimer(this);
@@ -148,21 +148,21 @@ void Module::setStatusSuccess(QString message) {
 }
 
 void Module::setStatusWorking(QString message) {
-    moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(40, 147, 247);"));
-    moduleWindow->statusBar()->showMessage(QString(QChar(0x2B6F)) + QString("   ") + message);
+    m_moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(40, 147, 247);"));
+    m_moduleWindow->statusBar()->showMessage(QString(QChar(0x2B6F)) + QString("   ") + message);
 }
 
 void Module::setStatusOK(QString message) {
-    moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(152, 14, 227);"));
-    moduleWindow->statusBar()->showMessage(QString(QChar(0x276E)) + QString(QChar(0x002F)) + QString(QChar(0x276F)) + QString("   ") + message);
+    m_moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(152, 14, 227);"));
+    m_moduleWindow->statusBar()->showMessage(QString(QChar(0x276E)) + QString(QChar(0x002F)) + QString(QChar(0x276F)) + QString("   ") + message);
 }
 
 void Module::setStatusFail(QString message) {
-    moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(201, 26, 26);"));
-    moduleWindow->statusBar()->showMessage(QString(QChar(0x2A2F)) + QString("   ") + message);
+    m_moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(201, 26, 26);"));
+    m_moduleWindow->statusBar()->showMessage(QString(QChar(0x2A2F)) + QString("   ") + message);
 }
 
 
 Editor* Module::getEditor(){
-    return editor;
+    return m_editor;
 }

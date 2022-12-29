@@ -2,26 +2,20 @@
 #define TIMELINEEDITOR_H
 
 #include "editor.h"
-#include "mainwindow.h"
 
 #include <QPushButton>
 #include <QSlider>
 #include <QLabel>
 
+
 class TimelineEditor : public Editor
 {
     Q_OBJECT
 public:
-    explicit TimelineEditor(Module *parent = nullptr, MainWindow *mainWindow = nullptr);
-
-public:
-    void updateTime(int t) override;
+    TimelineEditor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
 private:
     void setupTimeline();
-
-private slots:
-    void playButtonPressed(bool toggled);
 
 private:
     QPushButton *toBeginButton;

@@ -6,14 +6,12 @@
 #include <QLineEdit>
 #include <QPushButton>
 
-#include "mainwindow.h"
-
 
 class InputEditor : public Editor
 {
     Q_OBJECT
 public:
-    explicit InputEditor(Module *parent = nullptr, MainWindow *mainWindow = nullptr);
+    InputEditor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
 private:
     QLineEdit *fileSelection;

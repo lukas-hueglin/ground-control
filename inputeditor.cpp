@@ -6,33 +6,25 @@
 
 #include <QDebug>
 
-#include "module.h"
-
-InputEditor::InputEditor(Module *parent, MainWindow *mainWindow)
-    : Editor{parent}
+InputEditor::InputEditor(DataFrame *p_dataFrame, QWidget *parent)
+    : Editor{p_dataFrame, parent}
 {
-    // set parent
-    module = parent;
-
-    // set mainWindow
-    this->mainWindow = mainWindow;
-
     // create QWidget as viewport
-    viewport = new QWidget(module);
+    m_viewport = new QWidget(parent);
 
     // add viewport to container
-    container->addWidget(viewport);
+    m_container->addWidget(m_viewport);
 
     // add QGridLayout to viewport
-    QGridLayout *layout = new QGridLayout(viewport);
-    viewport->setLayout(layout);
+    QGridLayout *layout = new QGridLayout(m_viewport);
+    m_viewport->setLayout(layout);
 
 
-    fileSelection = new QLineEdit(QString(""), viewport);
+    fileSelection = new QLineEdit(QString(""), m_viewport);
     fileSelection->setReadOnly(true);
     layout->addWidget(fileSelection, 0, 0, 1, 1);
 
-    browseButton = new QPushButton(QString("Browse"), viewport);
+    browseButton = new QPushButton(QString("Browse"), m_viewport);
     layout->addWidget(browseButton, 0, 1, 1, 2);
 
     connect(browseButton, &QPushButton::pressed, this, &InputEditor::browse);
@@ -40,24 +32,23 @@ InputEditor::InputEditor(Module *parent, MainWindow *mainWindow)
 }
 
 void InputEditor::browse() {
-    QString filePath = QFileDialog::getOpenFileName(viewport, QString("Select Log File"), QString("*.csv"));
+    QString filePath = QFileDialog::getOpenFileName(m_viewport, QString("Select Log File"), QString("*.csv"));
 
-    module->setStatusWorking(QString("Loading: "+filePath));
+    //module->setStatusWorking(QString("Loading: "+filePath));
 
     // create timer
     QElapsedTimer timer;
 
     if (!filePath.isEmpty()) {
-        mainWindow->setFile(new QFile(filePath));
+        m_dataFrame->setFile(new QFile(filePath));
 
         // start timer and loading
         timer.start();
-        mainWindow->loadDataFromFile();
+    }
+    else{
+
     }
 
-    // Force time update to fully initialize timelines etc.
-    mainWindow->updateTime(0);
-
-    module->setStatusSuccess(QString("Elapsed Time: "+QString::number(timer.elapsed()))+QString(" ms")+ QString(" | ") + QString::number(mainWindow->getDataLen())+" Datapoints");
+    //module->setStatusSuccess(QString("Elapsed Time: "+QString::number(timer.elapsed()))+QString(" ms")+ QString(" | ") + QString::number(mainWindow->getDataLen())+" Datapoints");
     fileSelection->setText(filePath.split("/").last());
 }

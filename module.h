@@ -6,13 +6,13 @@
 
 #include "editor.h"
 #include "workspace.h"
-#include "mainwindow.h"
+#include "dataframe.h"
 
 class Module : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit Module(Workspace *parent = nullptr, MainWindow *mainWindow = nullptr);
+    explicit Module(DataFrame *p_dataFrame, Workspace *parent = nullptr);
 
 
 public:
@@ -30,12 +30,12 @@ public slots:
     void makeFloating();
 
 private:
-    Workspace *workspace;
-    MainWindow *mainWindow;
+    DataFrame *m_dataFrame;
+    Workspace *m_workspace; // is it really necessary
 
-    QMainWindow *moduleWindow;
+    QMainWindow *m_moduleWindow;
 
-    Editor *editor;
+    Editor *m_editor;
 };
 
 #endif // MODULE_H

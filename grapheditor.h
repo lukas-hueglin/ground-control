@@ -2,13 +2,12 @@
 #define GRAPHEDITOR_H
 
 #include "editor.h"
-#include "mainwindow.h"
 
 class GraphEditor : public Editor
 {
     Q_OBJECT
 public:
-    explicit GraphEditor(Module *parent = nullptr, MainWindow *mainWindow = nullptr);
+    GraphEditor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
 signals:
 

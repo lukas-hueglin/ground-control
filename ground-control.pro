@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     dashboardeditor.cpp \
+    dataframe.cpp \
     editor.cpp \
     grapheditor.cpp \
     inputeditor.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 
 HEADERS += \
     dashboardeditor.h \
+    dataframe.h \
     editor.h \
     grapheditor.h \
     inputeditor.h \

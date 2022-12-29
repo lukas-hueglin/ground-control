@@ -2,19 +2,21 @@
 #define DASHBOARDEDITOR_H
 
 #include "editor.h"
-#include "mainwindow.h"
 
 #include <QCheckBox>
 #include <QLabel>
 #include <QGridLayout>
 #include <QPushButton>
+#include <QDockWidget>
 
 
 struct DashboardLabel : public QDockWidget
 {
     Q_OBJECT
 public:
-    explicit DashboardLabel(QString strLabel, QString strValue, QWidget *parent = nullptr);
+    DashboardLabel(DataFrame *p_dataFrame, QString strLabel, QString strValue, QWidget *parent = nullptr);
+
+    DataFrame *m_dataFrame;
 
     QLabel* label;
     QLabel* value;
@@ -25,10 +27,7 @@ class DashboardEditor : public Editor
 {
     Q_OBJECT
 public:
-    explicit DashboardEditor(Module *parent = nullptr, MainWindow *mainWindow = nullptr);
-
-public:
-    void updateTime(int t) override;
+    DashboardEditor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
 private:
     void setupDrawer();

@@ -1,17 +1,12 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <QDockWidget>
-#include <QMainWindow>
-
 #include <QHBoxLayout>
-
 #include <QGroupBox>
 #include <QToolButton>
-
 #include <QParallelAnimationGroup>
 
-#include "mainwindow.h"
+#include "dataframe.h"
 
 
 class Module;
@@ -21,30 +16,23 @@ class Editor : public QWidget
 {
     Q_OBJECT
 public:
-    explicit Editor(Module *parent = nullptr, MainWindow *mainWindow = nullptr);
+    Editor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
 public:
     QWidget* getViewport();
-
-    virtual void updateTime(int t);
 
 protected:
     void setupDrawer();
 
 protected:
-    Module *module;
-    MainWindow *mainWindow;
+    DataFrame *m_dataFrame;
 
-    QHBoxLayout *container;
+    QHBoxLayout *m_container;
+    QWidget *m_viewport;
 
-    QWidget *viewport;
-
-    QGroupBox *drawer;
-    QToolButton *drawerButton;
-    QParallelAnimationGroup *drawerAnim;
-
-    int time;
-
+    QGroupBox *m_drawer;
+    QToolButton *m_drawerButton;
+    QParallelAnimationGroup *m_drawerAnim;
 };
 
 #endif // EDITOR_H
