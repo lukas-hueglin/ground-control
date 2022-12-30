@@ -14,10 +14,15 @@ public:
 
 public:
     float getValue(QString p_key);
-    QList<QString>* getKeys();
+    float getValue(QString p_key, unsigned int p_time);
+
     QDateTime* getDateTime();
+    QDateTime* getDateTime(unsigned int p_time);
+
+    QList<QString>* getKeys();
     unsigned int getTime();
     unsigned int getSize();
+
     bool isAlreadySetup();
 
 public slots:

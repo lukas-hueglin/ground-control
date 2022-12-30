@@ -43,12 +43,20 @@ float DataFrame::getValue(QString p_key) {
     return m_values->at(m_time)->find(p_key).value();
 }
 
-QList<QString>* DataFrame::getKeys() {
-    return m_keys;
+float DataFrame::getValue(QString p_key, unsigned int p_time) {
+    return m_values->at(p_time)->find(p_key).value();
 }
 
 QDateTime* DataFrame::getDateTime() {
     return m_times->at(m_time);
+}
+
+QDateTime* DataFrame::getDateTime(unsigned int p_time){
+    return m_times->at(p_time);
+}
+
+QList<QString>* DataFrame::getKeys() {
+    return m_keys;
 }
 
 unsigned int DataFrame::getTime() {
