@@ -33,7 +33,7 @@ InputEditor::InputEditor(DataFrame *p_dataFrame, QWidget *parent)
 
 void InputEditor::browse() {
     // set statusbar to working
-    onStatusChangeWorking(QString("Chose log file"));
+    onStatusChangeWorking(QString("Choose log file"));
 
     QString filePath = QFileDialog::getOpenFileName(m_viewport, QString("Select Log File"), QString("*.csv"));
 

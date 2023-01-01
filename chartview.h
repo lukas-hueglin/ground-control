@@ -5,13 +5,14 @@
 #include <QChart>
 
 #include "callout.h"
+#include "dataframe.h"
 
 class ChartView : public QChartView
 {
     Q_OBJECT
 
 public:
-    ChartView(QChart *p_chart, QWidget *parent = nullptr);
+    ChartView(DataFrame *p_dataFrame, QChart *p_chart, QWidget *parent = nullptr);
 
 public:
     void wheelEvent(QWheelEvent *event) Q_DECL_OVERRIDE;
@@ -22,14 +23,15 @@ public:
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
 public slots:
-    void requestCallout(QPointF p_pos, QString p_text, bool state);
+    void requestCallout(QPointF p_pos, QString p_key, bool state);
 
 private:
+    DataFrame *m_dataFrame;
+
     QChart *m_chart;
     Callout *m_callout;
 
     QPointF m_lastMousePos;
-
     bool m_allowCallout;
 };
 #endif // CHARTVIEW_H

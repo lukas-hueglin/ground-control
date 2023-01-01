@@ -1,10 +1,14 @@
 #include "chartview.h"
+#include "qdatetime.h"
 
 #include <QDebug>
 
-ChartView::ChartView(QChart *p_chart, QWidget *parent)
+ChartView::ChartView(DataFrame *p_dataFrame, QChart *p_chart, QWidget *parent)
     : QChartView{p_chart, parent}
 {
+    // set data frame
+    m_dataFrame = p_dataFrame;
+
     m_chart = p_chart;
     setRenderHint(QPainter::Antialiasing);
 
@@ -45,6 +49,10 @@ void ChartView::mouseMoveEvent(QMouseEvent *event) {
 
         m_lastMousePos = event->pos();
         event->accept();
+    } else if (event->button() == Qt::NoButton) {
+        m_callout->setAnchor(m_chart->mapToValue(event->pos()));
+        m_callout->updateGeometry();
+        event->accept();
     }
     QChartView::mouseMoveEvent(event);
 }
@@ -66,10 +74,10 @@ void ChartView::keyReleaseEvent(QKeyEvent *event) {
     QChartView::keyReleaseEvent(event);
 }
 
-void ChartView::requestCallout(QPointF p_pos, QString p_text, bool state) {
+void ChartView::requestCallout(QPointF p_pos, QString p_key, bool state) {
     if (state && m_allowCallout) {
         m_callout->setAnchor(p_pos);
-        m_callout->setText(p_text);
+        m_callout->setKey(p_key);
         m_callout->updateGeometry();
         m_callout->show();
     } else {

@@ -104,7 +104,7 @@ void GraphEditor::setupDrawer() {
 
 void GraphEditor::setupGraph() {
     // create QMainWindow as viewport
-    ChartView *chartView = new ChartView(m_chart);
+    ChartView *chartView = new ChartView(m_dataFrame, m_chart);
     m_viewport = chartView;
 
     // add viewport to container
@@ -117,6 +117,9 @@ void GraphEditor::setupGraph() {
     m_chart->addAxis(m_axisT, Qt::AlignBottom);
     m_chart->addAxis(m_axisY, Qt::AlignLeft);
 
+    // remove legend
+
+
     m_axisT->setRange(*m_dataFrame->getDateTime(0), *m_dataFrame->getDateTime(m_dataFrame->getSize()-1));
     m_axisY->setRange(0, 10);
 
@@ -125,20 +128,16 @@ void GraphEditor::setupGraph() {
 
     m_axisT->setFormat(QString("hh:mm:ss.zzz"));
 
-    // counting variable
-    int i = 0;
-
     // create new DashboardLabels for each checked QCheckbox
     for (QString key : *m_dataFrame->getKeys()) {
         if (key != QString("time")) {
             DataSeries *ds = new DataSeries(m_dataFrame, key, m_axisT, m_axisY, m_chart);
 
-            connect(ds->m_series, &QLineSeries::clicked, [chartView, ds](QPointF point){
-                chartView->requestCallout(point, ds->m_key, true);
+            connect(ds->m_series, &QLineSeries::hovered, [chartView, ds](QPointF point, bool state){
+                chartView->requestCallout(point, ds->m_key, state);
             });
 
             series->insert(key, ds);
-            ++i;
         }
     }
 }

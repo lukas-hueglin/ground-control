@@ -1,7 +1,7 @@
 #include "dataseries.h"
 
 #include <QDateTime>
-
+#include <QTimer>
 
 DataSeries::DataSeries(DataFrame *p_dataFrame, QString p_key, QDateTimeAxis *p_axisT, QValueAxis *p_axisY, QChart *parent)
     : QObject{parent}
@@ -24,10 +24,13 @@ DataSeries::DataSeries(DataFrame *p_dataFrame, QString p_key, QDateTimeAxis *p_a
     m_area->attachAxis(p_axisT);
     m_area->attachAxis(p_axisY);
 
-    // attach series
-    parent->addSeries(m_series);
-    m_series->attachAxis(p_axisT);
-    m_series->attachAxis(p_axisY);
+    // wait for all area series to be attached and then attach series (hitbox)
+    QTimer::singleShot(50, [this, parent, p_axisT, p_axisY](){
+        parent->addSeries(m_series);
+        m_series->attachAxis(p_axisT);
+        m_series->attachAxis(p_axisY);
+    });
+
 
     // set colors
     setColor(QColor("blue"));

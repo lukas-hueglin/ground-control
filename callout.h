@@ -12,7 +12,7 @@ public:
 
 public:
     void setAnchor(QPointF p_anchor);
-    void setText(QString p_text);
+    void setKey(QString p_key);
 
     QRectF boundingRect() const;
     void updateGeometry();
@@ -24,7 +24,7 @@ private:
     QPointF m_anchor;
     QRect m_rect;
 
-    QString m_text;
+    QString m_key;
 };
 
 #endif // CALLOUT_H
