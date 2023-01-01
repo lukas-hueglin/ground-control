@@ -5,6 +5,10 @@
 #include <QTabWidget>
 #include <QDockWidget>
 
+#include <QFile>
+#include <QDateTime>
+
+#include "dataframe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,5 +28,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     QTabWidget *tabWidget;
+
+    DataFrame *m_dataFrame;
 };
 #endif // MAINWINDOW_H

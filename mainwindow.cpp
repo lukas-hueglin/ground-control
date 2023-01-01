@@ -4,10 +4,10 @@
 #include "workspace.h"
 #include "module.h"
 
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
@@ -16,8 +16,11 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(tabWidget);
 
     // add tabs
-    tabWidget->addTab(new Workspace, QString("Workspace 1"));
-    tabWidget->addTab(new Workspace, QString("Workspace 2"));
+    tabWidget->addTab(new Workspace(this), QString("Workspace 1"));
+    tabWidget->addTab(new Workspace(this), QString("Workspace 2"));
+
+    // create new dataFrame
+    m_dataFrame = new DataFrame();
 
     // hide statusbar
     statusBar()->hide();
@@ -31,15 +34,14 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::on_actionNew_Editor_triggered()
 {
     // get active workspace
-    QMainWindow *workspace = qobject_cast<QMainWindow*>(tabWidget->currentWidget());
+    Workspace *workspace = qobject_cast<Workspace*>(tabWidget->currentWidget());
 
     // create QDockWidget and add it to the workspace
-    Module *module = new Module(workspace);
+    Module *module = new Module(m_dataFrame, workspace);
     //module->show();
     workspace->addDockWidget(Qt::RightDockWidgetArea, module);
+    workspace->addModule(module);
 }
-
