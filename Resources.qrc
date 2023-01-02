@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/apiKey">
+        <file>key.txt</file>
+    </qresource>
+</RCC>

@@ -71,3 +71,9 @@ Thumbs.db
 *.dll
 *.exe
 
+# API key file
+key.txt
+
+# 3d files
+*.dae
+

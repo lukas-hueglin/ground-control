@@ -1,8 +1,11 @@
-QT       += core gui charts
+QT       += core gui charts widgets openglwidgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++17
+
+ARCGIS_RUNTIME_VERSION = 200.0.0
+include($$PWD/arcgisruntime.pri)
 
 # You can make your code fail to compile if it uses deprecated APIs.
 # In order to do so, uncomment the following line.
@@ -15,6 +18,7 @@ SOURCES += \
     dataframe.cpp \
     dataseries.cpp \
     editor.cpp \
+    globeeditor.cpp \
     grapheditor.cpp \
     inputeditor.cpp \
     main.cpp \
@@ -31,6 +35,7 @@ HEADERS += \
     dataframe.h \
     dataseries.h \
     editor.h \
+    globeeditor.h \
     grapheditor.h \
     inputeditor.h \
     mainwindow.h \
@@ -46,3 +51,9 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    key.txt
+
+RESOURCES += \
+    Resources.qrc
