@@ -72,6 +72,9 @@ void TimelineEditor::setupTimeline(){
     toEndButton = new QPushButton(QString(QChar(0x276F))+QString(QChar(0x2B25)), m_viewport);
     layout->addWidget(toEndButton, 0, 5, 1, 1);
 
+    speedButton = new QPushButton(QString("1x"), m_viewport);
+    layout->addWidget(speedButton, 0, 14, 1, 1);
+
     // connect QPushButtons
     connect(playButton, &QPushButton::clicked, m_dataFrame, &DataFrame::setPlayState);
 
@@ -80,16 +83,22 @@ void TimelineEditor::setupTimeline(){
     connect(forwardButton, &QPushButton::pressed, [this](){m_dataFrame->setTime(fmin(m_dataFrame->getTime()+1, m_dataFrame->getSize()-1));});
     connect(toEndButton, &QPushButton::pressed, [this](){m_dataFrame->setTime(m_dataFrame->getSize()-1);});
 
+    connect(speedButton, &QPushButton::pressed, m_dataFrame, &DataFrame::increaseSpeed);
+
     // connect QPushButton Feedback
     connect(m_dataFrame, &DataFrame::onPlayStateChanged, [this](bool p_play){
         if (p_play) {
             playButton->setText(QString(QChar(0x2016)));
-            onStatusChangeWorking(QString("Playing"));
+            emit onStatusChangeWorking(QString("Playing"));
         } else {
             playButton->setText(QString(QChar(0x2BC8)));
-            onStatusChangeOK(QString(""));
+            emit onStatusChangeOK(QString(""));
         }
 
+    });
+
+    connect(m_dataFrame, &DataFrame::onSpeedIncreased, [this](int p_speed){
+        speedButton->setText(QString::number(p_speed)+"x");
     });
 
     // create QSlider
