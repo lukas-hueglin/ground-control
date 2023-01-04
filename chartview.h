@@ -22,6 +22,8 @@ public:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
+    void setXAxisAlign(bool p_state);
+
 public slots:
     void requestCallout(QPointF p_pos, QString p_key, bool state);
 
@@ -32,6 +34,10 @@ private:
     Callout *m_callout;
 
     QPointF m_lastMousePos;
+
+    float m_time0;
+
+    bool m_alignXAxis;
     bool m_allowCallout;
 };
 #endif // CHARTVIEW_H

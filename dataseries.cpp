@@ -15,8 +15,12 @@ DataSeries::DataSeries(DataFrame *p_dataFrame, QString p_key, QDateTimeAxis *p_a
     // create line series
     m_series = new QLineSeries(parent);
 
-    // create lower line and area series
-    QLineSeries *lowerSeries = 0;
+    // create lower line series
+    QLineSeries *lowerSeries = new QLineSeries;
+    lowerSeries->append(QPointF(m_dataFrame->getDateTime(0)->toMSecsSinceEpoch(), 0));
+    lowerSeries->append(QPointF(m_dataFrame->getDateTime(m_dataFrame->getSize()-1)->toMSecsSinceEpoch(), 0));
+
+    // create area series
     m_area = new QAreaSeries(m_series, lowerSeries);
 
     // attach area series

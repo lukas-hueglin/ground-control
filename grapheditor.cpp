@@ -67,8 +67,27 @@ void GraphEditor::setupDrawer() {
     QGridLayout *drawerLayout = new QGridLayout(m_drawer);
     m_drawer->setLayout(drawerLayout);
 
+    // create QCheckbox for aligning the plot on the x-axis
+    QCheckBox *alignBox = new QCheckBox(QString("Align x-Axis"), m_drawer);
+    alignBox->setChecked(false);
+    drawerLayout->addWidget(alignBox, 0, 0);
+
+    connect(alignBox, &QCheckBox::clicked, [this](bool state){
+        qobject_cast<ChartView*>(m_viewport)->setXAxisAlign(state);
+
+        float top = m_chart->mapToValue(m_chart->plotArea().topLeft()).y();
+        float bottom = m_chart->mapToValue(m_chart->plotArea().bottomRight()).y();
+        float unit = m_chart->plotArea().height() / (top - bottom);
+
+        if (state) {
+            m_chart->scroll(0, -unit * (top + bottom) / 2);
+        } else {
+            m_chart->scroll(0, -unit * bottom);
+        }
+    });
+
     // counter variable for row
-    int row = 0;
+    int row = 1;
 
     for(QString key : *m_dataFrame->getKeys()){
         if (key != QString("time")) {
