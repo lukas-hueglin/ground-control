@@ -11,6 +11,7 @@
 #include "timelineeditor.h"
 #include "dashboardeditor.h"
 #include "globeeditor.h"
+#include "mapeditor.h"
 
 
 Module::Module(DataFrame *p_dataFrame, Workspace *parent)
@@ -41,6 +42,7 @@ Module::Module(DataFrame *p_dataFrame, Workspace *parent)
     comboBox->addItem(QString("Timeline Editor"));
     comboBox->addItem(QString("Dashboard Editor"));
     comboBox->addItem(QString("Globe Editor"));
+    comboBox->addItem(QString("Map Editor"));
 
     titleLayout->addWidget(comboBox);
 
@@ -102,6 +104,10 @@ void Module::changeEditor(const int index) {
             break;
         case 5:
             m_editor = new GlobeEditor(m_dataFrame, this);
+            m_moduleWindow->setCentralWidget(m_editor);
+            break;
+        case 6:
+            m_editor = new MapEditor(m_dataFrame, this);
             m_moduleWindow->setCentralWidget(m_editor);
             break;
     }

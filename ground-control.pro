@@ -23,6 +23,7 @@ SOURCES += \
     inputeditor.cpp \
     main.cpp \
     mainwindow.cpp \
+    mapeditor.cpp \
     module.cpp \
     timelineeditor.cpp \
     viewport.cpp \
@@ -39,6 +40,7 @@ HEADERS += \
     grapheditor.h \
     inputeditor.h \
     mainwindow.h \
+    mapeditor.h \
     module.h \
     timelineeditor.h \
     viewport.h \
