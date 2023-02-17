@@ -23,6 +23,7 @@ private:
     QPushButton *playButton;
     QPushButton *toEndButton;
     QPushButton *forwardButton;
+    QPushButton *speedButton;
 
     QSlider *timeline;
     QLabel *timeIndicator;

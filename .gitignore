@@ -8,6 +8,8 @@
 *.moc
 *.o
 *.obj
+*.mtl
+*.png
 *.orig
 *.rej
 *.so
@@ -70,4 +72,7 @@ Thumbs.db
 # --------
 *.dll
 *.exe
+
+# API key file
+key.txt
 

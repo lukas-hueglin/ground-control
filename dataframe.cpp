@@ -22,6 +22,9 @@ DataFrame::DataFrame(QFile *p_file, QObject *parent)
     // set time;
     m_time = 0;
 
+    // set speed
+    m_speed = 1;
+
     // set play
     m_play = false;
 
@@ -146,6 +149,15 @@ void DataFrame::setFile(QFile *p_file){
     emit onFileChanged(m_file);
 }
 
+void DataFrame::increaseSpeed() {
+    m_speed *= 2;
+
+    if (m_speed > 32) {
+        m_speed = 1;
+    }
+    emit onSpeedIncreased(m_speed);
+}
+
 void DataFrame::playLoop() {
     if (m_play) {
         QDateTime *t1 = m_times->at(m_time);
@@ -154,7 +166,7 @@ void DataFrame::playLoop() {
         int ms = t1->daysTo(*t2)*1000*60*60*24 + t1->time().msecsTo(t2->time());
 
         emit onTimeChanged(++m_time);
-        QTimer::singleShot(ms, [this](){playLoop();});
+        QTimer::singleShot(ms/m_speed, [this](){playLoop();});
     }
 }
 
