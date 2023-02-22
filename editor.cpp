@@ -31,6 +31,14 @@ QWidget* Editor::getViewport() {
     return m_viewport;
 }
 
+QSize Editor::sizeHint() const {
+    return QSize(100, 50);
+}
+
+QSize Editor::minimumSizeHint() const {
+    return QSize(0, 0);
+}
+
 void Editor::setupDrawer() {
     // create QGroupBox
     m_drawer = new QGroupBox(QString("Settings"), this);

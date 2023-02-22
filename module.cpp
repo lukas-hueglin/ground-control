@@ -1,7 +1,6 @@
 #include "module.h"
 
 #include <QHBoxLayout>
-#include <QComboBox>
 #include <QPushButton>
 #include <QStatusBar>
 #include <QTimer>
@@ -12,6 +11,123 @@
 #include "dashboardeditor.h"
 #include "globeeditor.h"
 #include "mapeditor.h"
+
+
+Titlebar::Titlebar(Module *parent)
+    : QWidget{parent}
+{
+    // create a QHBoxLayout
+    QHBoxLayout *titleLayout = new QHBoxLayout;
+    setLayout(titleLayout);
+
+    // add a QComboBox
+    m_comboBox = new QComboBox(this);
+    m_comboBox->setMaximumWidth(200);
+
+    m_comboBox->addItem(QString("Empty"));
+    m_comboBox->addItem(QString("Graph Editor"));
+    m_comboBox->addItem(QString("Input Editor"));
+    m_comboBox->addItem(QString("Timeline Editor"));
+    m_comboBox->addItem(QString("Dashboard Editor"));
+    m_comboBox->addItem(QString("Globe Editor"));
+    m_comboBox->addItem(QString("Map Editor"));
+
+    titleLayout->addWidget(m_comboBox);
+    titleLayout->addStretch();
+
+    // connect comboBox to slots
+    connect(m_comboBox, &QComboBox::currentIndexChanged, parent, &Module::changeEditor);
+
+    // add a QPushButton for splitting the module horizontally
+    QPushButton *splitButtonH = new QPushButton(QString("H"), this);
+    titleLayout->addWidget(splitButtonH);
+    splitButtonH->setMaximumWidth(25);
+    connect(splitButtonH, &QPushButton::pressed, parent, &Module::splitModuleHorizontally);
+
+    // add a QPushButton for splitting the module vertically
+    QPushButton *splitButtonV = new QPushButton(QString("V"), this);
+    titleLayout->addWidget(splitButtonV);
+    splitButtonV->setMaximumWidth(25);
+    connect(splitButtonV, &QPushButton::pressed, parent, &Module::splitModuleVertically);
+
+    // add a QPushButton for making the module float
+    QPushButton *floatButton = new QPushButton(QString("Float"), this);
+    titleLayout->addWidget(floatButton);
+    floatButton->setMaximumWidth(25);
+    connect(floatButton, &QPushButton::pressed, parent, &Module::makeFloating);
+
+    // add a QPushButton for closing the module
+    QPushButton *closeButton = new QPushButton(QString("X"), this);
+    titleLayout->addWidget(closeButton);
+    closeButton->setMaximumWidth(25);
+    connect(closeButton, &QPushButton::pressed, parent, &Module::close);
+}
+
+QSize Titlebar::sizeHint() const {
+    return QSize(300, 50);
+}
+
+QSize Titlebar::minimumSizeHint() const {
+    return QSize(0, 0);
+}
+
+QComboBox* Titlebar::getComboBox() {
+    return m_comboBox;
+}
+
+
+Statusbar::Statusbar(Module *parent)
+    : QWidget{parent}
+{
+    QWidget *w = new QWidget(this);
+
+    // create a QHBoxLayout
+    QHBoxLayout *layout = new QHBoxLayout;
+    layout->setContentsMargins(0, 0, 0, 0);
+    setLayout(layout);
+
+    // create icon
+    m_icon = new QLabel(QString(QChar(0x276E)) + QString(QChar(0x002F)) + QString(QChar(0x276F)));
+    m_icon->setAlignment(Qt::AlignCenter);
+    m_icon->setFixedSize(QSize(50, 25));
+    layout->addWidget(m_icon);
+
+    // create message
+    m_message = new QLabel("");
+    m_message->setAlignment(Qt::AlignVCenter);
+    m_message->setFixedHeight(25);
+    layout->addWidget(m_message, 1);
+
+    // set stylesheet
+    setStyleSheet(QString("background-color: rgb(152, 14, 227);"));
+}
+
+QSize Statusbar::sizeHint() const {
+    return QSize(300, 25);
+}
+
+QSize Statusbar::minimumSizeHint() const {
+    return QSize(0, 0);
+}
+
+void Statusbar::setIcon(QString str) {
+    m_icon->setText(str);
+}
+
+void Statusbar::setMessage(QString str) {
+    m_message->setText(str);
+}
+
+
+ContainerWidget::ContainerWidget(Module *parent) : QWidget{parent} {}
+
+QSize ContainerWidget::sizeHint() const {
+    return QSize(300, 200);
+}
+
+QSize ContainerWidget::minimumSizeHint() const {
+    return QSize(0, 0);
+}
 
 
 Module::Module(DataFrame *p_dataFrame, Workspace *parent)
@@ -27,146 +143,146 @@ Module::Module(DataFrame *p_dataFrame, Workspace *parent)
     m_editor = new Editor(m_dataFrame, this);
 
     // create the titlebar
-    QWidget *titlebar = new QWidget(this);
-    setTitleBarWidget(titlebar);
+    m_titlebar = new Titlebar(this);
+    setTitleBarWidget(m_titlebar);
 
-    // create a QHBoxLayout
-    QHBoxLayout *titleLayout = new QHBoxLayout;
-    titlebar->setLayout(titleLayout);
+    //create the statusbar
+    m_statusbar = new Statusbar(this);
 
-    // add a QComboBox
-    QComboBox *comboBox = new QComboBox(titlebar);
-    comboBox->addItem(QString("Empty"));
-    comboBox->addItem(QString("Graph Editor"));
-    comboBox->addItem(QString("Input Editor"));
-    comboBox->addItem(QString("Timeline Editor"));
-    comboBox->addItem(QString("Dashboard Editor"));
-    comboBox->addItem(QString("Globe Editor"));
-    comboBox->addItem(QString("Map Editor"));
+    // create QVBoxLayout
+    m_layout = new QVBoxLayout;
+    m_layout->setContentsMargins(0, 0, 0, 0);
 
-    titleLayout->addWidget(comboBox);
+    // create container widget
+    ContainerWidget *container = new ContainerWidget(this);
+    setWidget(container);
+    container->setLayout(m_layout);
 
-    // connect comboBox to slots
-    connect(comboBox, &QComboBox::currentIndexChanged, this, &Module::changeEditor);
-
-    // add a QPushButton for splitting the module horizontally
-    QPushButton *splitButtonH = new QPushButton(QString("H"), titlebar);
-    titleLayout->addWidget(splitButtonH);
-    connect(splitButtonH, &QPushButton::pressed, this, &Module::splitModuleHorizontally);
-
-    // add a QPushButton for splitting the module vertically
-    QPushButton *splitButtonV = new QPushButton(QString("V"), titlebar);
-    titleLayout->addWidget(splitButtonV);
-    connect(splitButtonV, &QPushButton::pressed, this, &Module::splitModuleVertically);
-
-    // add a QPushButton for making the module float
-    QPushButton *floatButton = new QPushButton(QString("Float"), titlebar);
-    titleLayout->addWidget(floatButton);
-    connect(floatButton, &QPushButton::pressed, this, &Module::makeFloating);
-
-    // add a QPushButton for closing the module
-    QPushButton *closeButton = new QPushButton(QString("X"), titlebar);
-    titleLayout->addWidget(closeButton);
-    connect(closeButton, &QPushButton::pressed, this, &Module::close);
-
-    // create QMainWindow and set as widget
-    m_moduleWindow = new QMainWindow;
-    setWidget(m_moduleWindow);
-    m_moduleWindow->setCentralWidget(m_editor);
-
-    // set statusbar status
-    setStatusOK();
+    m_layout->addWidget(m_editor, 1);
+    m_layout->addWidget(m_statusbar);
 }
 
+void Module::changeComboBox(int index){
+    m_titlebar->getComboBox()->setCurrentIndex(index);
+}
+
+QSize Module::sizeHint() const {
+    return QSize(300, 200);
+}
+
+QSize Module::minimumSizeHint() const {
+    return QSize(0, 0);
+}
 
 // change editor accordingly to QComboBox
 void Module::changeEditor(const int index) {
     switch(index) {
         case 0:
+            m_layout->removeWidget(m_editor);
+            delete m_editor;
             m_editor = new Editor(m_dataFrame, this);
-            m_moduleWindow->setCentralWidget(m_editor);
+            m_layout->insertWidget(0, m_editor, 1);
             break;
         case 1:
+            m_layout->removeWidget(m_editor);
+            delete m_editor;
             m_editor = new GraphEditor(m_dataFrame, this);
-            m_moduleWindow->setCentralWidget(m_editor);
+            m_layout->insertWidget(0, m_editor, 1);
             break;
         case 2:
+            m_layout->removeWidget(m_editor);
+            delete m_editor;
             m_editor = new InputEditor(m_dataFrame, this);
-            m_moduleWindow->setCentralWidget(m_editor);
+            m_layout->insertWidget(0, m_editor, 1);
             break;
         case 3:
+            m_layout->removeWidget(m_editor);
+            delete m_editor;
             m_editor = new TimelineEditor(m_dataFrame, this);
-            m_moduleWindow->setCentralWidget(m_editor);
+            m_layout->insertWidget(0, m_editor, 1);
             break;
         case 4:
+            m_layout->removeWidget(m_editor);
+            delete m_editor;
             m_editor = new DashboardEditor(m_dataFrame, this);
-            m_moduleWindow->setCentralWidget(m_editor);
+            m_layout->insertWidget(0, m_editor, 1);
             break;
         case 5:
+            m_layout->removeWidget(m_editor);
+            delete m_editor;
             m_editor = new GlobeEditor(m_dataFrame, this);
-            m_moduleWindow->setCentralWidget(m_editor);
+            m_layout->insertWidget(0, m_editor, 1);
             break;
         case 6:
+            m_layout->removeWidget(m_editor);
+            delete m_editor;
             m_editor = new MapEditor(m_dataFrame, this);
-            m_moduleWindow->setCentralWidget(m_editor);
+            m_layout->insertWidget(0, m_editor, 1);
             break;
     }
 }
-
-
-// splits the module into two modules, these are horizontally arranged
-void Module::splitModuleHorizontally() {
-    // let the parent workspace split the Modules
-    if (m_workspace != nullptr){
-        Module* newModule = new Module(m_dataFrame, m_workspace);
-        m_workspace->splitDockWidget(this, newModule, Qt::Horizontal);
-        m_workspace->addModule(newModule);
-    } else {
-
-    }
-}
-
-// splits the module into two modules, these are vertically arranged
-void Module::splitModuleVertically() {
-    // let the parent workspace split the Modules
-    if (m_workspace != nullptr){
-        Module* newModule = new Module(m_dataFrame, m_workspace);
-        m_workspace->splitDockWidget(this, newModule, Qt::Vertical);
-        m_workspace->addModule(newModule);
-    } else {
-
-    }
-}
-
 
 // makes the module float
 void Module::makeFloating() {
     setFloating(true);
 }
 
+// splits the module into two modules, these are horizontally arranged
+Module* Module::splitModuleHorizontally() {
+    // let the parent workspace split the Modules
+    if (m_workspace != nullptr){
+        Module* newModule = new Module(m_dataFrame, m_workspace);
+        m_workspace->addModule(newModule);
+        m_workspace->splitDockWidget(this, newModule, Qt::Horizontal);
+
+        return newModule;
+    }
+    return nullptr;
+}
+
+// splits the module into two modules, these are vertically arranged
+Module* Module::splitModuleVertically() {
+    // let the parent workspace split the Modules
+    if (m_workspace != nullptr){
+        Module* newModule = new Module(m_dataFrame, m_workspace);
+        m_workspace->addModule(newModule);
+        m_workspace->splitDockWidget(this, newModule, Qt::Vertical);
+
+        return newModule;
+    }
+    return nullptr;
+}
 
 // change colors of statusbar
 void Module::setStatusSuccess(QString message) {
-    m_moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(52, 186, 45);"));
-    m_moduleWindow->statusBar()->showMessage(QString(QChar(0x2713)) + QString("   ") + message);
+    m_statusbar->setStyleSheet(QString("background-color: rgb(52, 186, 45);"));
+
+    m_statusbar->setIcon(QString(QChar(0x2713)));
+    m_statusbar->setMessage(message);
 
     // the success status will only be shown shortly
     QTimer::singleShot(7000, [this](){setStatusOK(QString(""));});
 }
 
 void Module::setStatusWorking(QString message) {
-    m_moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(40, 147, 247);"));
-    m_moduleWindow->statusBar()->showMessage(QString(QChar(0x2B6F)) + QString("   ") + message);
+    m_statusbar->setStyleSheet(QString("background-color: rgb(40, 147, 247);"));
+
+    m_statusbar->setIcon(QString(QChar(0x2B6F)));
+    m_statusbar->setMessage(message);
 }
 
 void Module::setStatusOK(QString message) {
-    m_moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(152, 14, 227);"));
-    m_moduleWindow->statusBar()->showMessage(QString(QChar(0x276E)) + QString(QChar(0x002F)) + QString(QChar(0x276F)) + QString("   ") + message);
+    m_statusbar->setStyleSheet(QString("background-color: rgb(152, 14, 227);"));
+
+    m_statusbar->setIcon(QString(QChar(0x276E)) + QString(QChar(0x002F)) + QString(QChar(0x276F)));
+    m_statusbar->setMessage(message);
 }
 
 void Module::setStatusFail(QString message) {
-    m_moduleWindow->statusBar()->setStyleSheet(QString("background-color: rgb(201, 26, 26);"));
-    m_moduleWindow->statusBar()->showMessage(QString(QChar(0x2A2F)) + QString("   ") + message);
+    m_statusbar->setStyleSheet(QString("background-color: rgb(201, 26, 26);"));
+
+    m_statusbar->setIcon(QString(QChar(0x2A2F)));
+    m_statusbar->setMessage(message);
 }
 
 

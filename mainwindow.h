@@ -7,12 +7,16 @@
 
 #include <QFile>
 #include <QDateTime>
+#include <QtXml>
 
 #include "dataframe.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
+
+class Workspace;
+class Module;
 
 class MainWindow : public QMainWindow
 {
@@ -22,12 +26,16 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+private:
+    void parseLayout(QDomDocument *xml);
+    void parseModule(Workspace *w, Module *fm, QDomElement e);
+
 private slots:
     void on_actionNew_Editor_triggered();
 
 private:
     Ui::MainWindow *ui;
-    QTabWidget *tabWidget;
+    QTabWidget *m_tabWidget;
 
     DataFrame *m_dataFrame;
 };

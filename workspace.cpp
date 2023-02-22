@@ -13,6 +13,9 @@ Workspace::Workspace(MainWindow *parent)
 
     // set Module list
     modules = new QList<Module*>;
+
+    // no central widget
+    setCentralWidget(nullptr);
 }
 
 void Workspace::addModule(Module *m) {

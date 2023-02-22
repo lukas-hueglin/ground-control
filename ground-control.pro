@@ -1,4 +1,4 @@
-QT       += core gui charts widgets openglwidgets
+QT       += core gui charts widgets openglwidgets xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -55,6 +55,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    default.xml \
     key.txt
 
 RESOURCES += \
