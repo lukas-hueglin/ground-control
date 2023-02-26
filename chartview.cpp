@@ -34,8 +34,6 @@ void ChartView::wheelEvent(QWheelEvent *event) {
 
     QPointF center = m_chart->mapToValue(m_chart->mapFromScene(mapToScene(m_lastMousePos.toPoint())));
 
-    qDebug() << center.x() - m_time0 << " | " << center.y();
-
     center.setY(m_alignXAxis ? rect.center().y() : factor*rect.center().y());
 
     rect.setWidth(ctrl ? rect.width() : factor*rect.width());

@@ -24,6 +24,10 @@ DashboardLabel::DashboardLabel(DataFrame *p_dataFrame, QString strLabel, QString
     label = new QLabel(strLabel);
     value = new QLabel(strValue);
 
+    // add properties to QLabels
+    label->setProperty("cssClass", "dashlabel");
+    value->setProperty("cssClass", "dashvalue");
+
     // set Alignment of QLabels
     label->setAlignment(Qt::AlignCenter);
     value->setAlignment(Qt::AlignCenter);
@@ -82,6 +86,9 @@ DashboardEditor::DashboardEditor(DataFrame *p_dataFrame, QWidget *parent)
         setupDashboard();
         properlySetup = true;
     });
+
+    // add property to dashboard
+    setProperty("cssClass", "dashboard");
 }
 
 void DashboardEditor::setupDrawer() {
@@ -108,10 +115,10 @@ void DashboardEditor::setupDrawer() {
             drawerLayout->addWidget(checkBox, row, 0);
 
             connect(colorButton, &QPushButton::pressed, [this, key](){
-                QColorDialog *colorDialog = new QColorDialog;
+                QColorDialog *colorDialog = new QColorDialog(this);
 
                 connect(colorDialog, &QColorDialog::colorSelected, [this, key](QColor color){
-                    labels->find(key).value()->label->setStyleSheet("color: " + color.name() + ";");
+                    labels->find(key).value()->value->setStyleSheet("color: " + color.name() + ";");
                 });
                 connect(colorDialog, &QColorDialog::colorSelected, [this, key](QColor color){
                     colorButtons->find(key).value()->setStyleSheet("background-color: " + color.name() + ";");

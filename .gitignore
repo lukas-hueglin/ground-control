@@ -76,3 +76,10 @@ Thumbs.db
 # API key file
 key.txt
 
+# fonts
+*.ttf
+*.otf
+
+# svg and png files
+*.svg
+*.png

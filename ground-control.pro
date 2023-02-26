@@ -55,8 +55,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    darktheme.xml \
     default.xml \
-    key.txt
+    key.txt \
+    stylesheet.qss
 
 RESOURCES += \
     Resources.qrc

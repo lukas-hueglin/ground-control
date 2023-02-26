@@ -24,13 +24,13 @@ Titlebar::Titlebar(Module *parent)
     m_comboBox = new QComboBox(this);
     m_comboBox->setMaximumWidth(200);
 
-    m_comboBox->addItem(QString("Empty"));
-    m_comboBox->addItem(QString("Graph Editor"));
-    m_comboBox->addItem(QString("Input Editor"));
-    m_comboBox->addItem(QString("Timeline Editor"));
-    m_comboBox->addItem(QString("Dashboard Editor"));
-    m_comboBox->addItem(QString("Globe Editor"));
-    m_comboBox->addItem(QString("Map Editor"));
+    m_comboBox->addItem(QIcon(":/icons/dark_empty.svg"), QString("Empty"));
+    m_comboBox->addItem(QIcon(":/icons/dark_graph.svg"), QString("Graph Editor"));
+    m_comboBox->addItem(QIcon(":/icons/dark_input.svg"), QString("Input Editor"));
+    m_comboBox->addItem(QIcon(":/icons/dark_timeline.svg"), QString("Timeline Editor"));
+    m_comboBox->addItem(QIcon(":/icons/dark_dashboard.svg"), QString("Dashboard Editor"));
+    m_comboBox->addItem(QIcon(":/icons/dark_globe.svg"), QString("Globe Editor"));
+    m_comboBox->addItem(QIcon(":/icons/dark_map.svg"), QString("Map Editor"));
 
     titleLayout->addWidget(m_comboBox);
     titleLayout->addStretch();
@@ -39,28 +39,31 @@ Titlebar::Titlebar(Module *parent)
     connect(m_comboBox, &QComboBox::currentIndexChanged, parent, &Module::changeEditor);
 
     // add a QPushButton for splitting the module horizontally
-    QPushButton *splitButtonH = new QPushButton(QString("H"), this);
+    QPushButton *splitButtonH = new QPushButton("", this);
     titleLayout->addWidget(splitButtonH);
-    splitButtonH->setMaximumWidth(25);
+    splitButtonH->setProperty("cssClass", "splitH");
     connect(splitButtonH, &QPushButton::pressed, parent, &Module::splitModuleHorizontally);
 
     // add a QPushButton for splitting the module vertically
-    QPushButton *splitButtonV = new QPushButton(QString("V"), this);
+    QPushButton *splitButtonV = new QPushButton("", this);
     titleLayout->addWidget(splitButtonV);
-    splitButtonV->setMaximumWidth(25);
+    splitButtonV->setProperty("cssClass", "splitV");
     connect(splitButtonV, &QPushButton::pressed, parent, &Module::splitModuleVertically);
 
     // add a QPushButton for making the module float
-    QPushButton *floatButton = new QPushButton(QString("Float"), this);
+    QPushButton *floatButton = new QPushButton("", this);
     titleLayout->addWidget(floatButton);
-    floatButton->setMaximumWidth(25);
+    floatButton->setProperty("cssClass", "float");
     connect(floatButton, &QPushButton::pressed, parent, &Module::makeFloating);
 
     // add a QPushButton for closing the module
-    QPushButton *closeButton = new QPushButton(QString("X"), this);
+    QPushButton *closeButton = new QPushButton("", this);
     titleLayout->addWidget(closeButton);
-    closeButton->setMaximumWidth(25);
+    closeButton->setProperty("cssClass", "close");
     connect(closeButton, &QPushButton::pressed, parent, &Module::close);
+
+    // add property
+    setProperty("cssClass", "titlebar");
 }
 
 QSize Titlebar::sizeHint() const {
@@ -87,10 +90,12 @@ Statusbar::Statusbar(Module *parent)
     setLayout(layout);
 
     // create icon
-    m_icon = new QLabel(QString(QChar(0x276E)) + QString(QChar(0x002F)) + QString(QChar(0x276F)));
+    m_icon = new QLabel("");
+    m_icon->setPixmap(QIcon(":/icons/dark_OK.svg").pixmap(QSize(20, 20)));
     m_icon->setAlignment(Qt::AlignCenter);
     m_icon->setFixedSize(QSize(50, 25));
     layout->addWidget(m_icon);
+
 
     // create message
     m_message = new QLabel("");
@@ -99,7 +104,7 @@ Statusbar::Statusbar(Module *parent)
     layout->addWidget(m_message, 1);
 
     // set stylesheet
-    setStyleSheet(QString("background-color: rgb(152, 14, 227);"));
+    setStyleSheet(QString("background-color: hsv(279, 94%, 89%);"));
 }
 
 QSize Statusbar::sizeHint() const {
@@ -110,8 +115,8 @@ QSize Statusbar::minimumSizeHint() const {
     return QSize(0, 0);
 }
 
-void Statusbar::setIcon(QString str) {
-    m_icon->setText(str);
+void Statusbar::setIcon(QPixmap pixmap) {
+    m_icon->setPixmap(pixmap);
 }
 
 void Statusbar::setMessage(QString str) {
@@ -254,10 +259,17 @@ Module* Module::splitModuleVertically() {
 }
 
 // change colors of statusbar
-void Module::setStatusSuccess(QString message) {
-    m_statusbar->setStyleSheet(QString("background-color: rgb(52, 186, 45);"));
+void Module::setStatusOK(QString message) {
+    m_statusbar->setStyleSheet(QString("background-color: hsv(279, 94%, 89%);"));
 
-    m_statusbar->setIcon(QString(QChar(0x2713)));
+    m_statusbar->setIcon(QIcon(":/icons/dark_OK.svg").pixmap(QSize(20, 20)));
+    m_statusbar->setMessage(message);
+}
+
+void Module::setStatusSuccess(QString message) {
+    m_statusbar->setStyleSheet(QString("background-color: hsv(117, 76%, 73%)"));
+
+    m_statusbar->setIcon(QIcon(":/icons/dark_success.svg").pixmap(QSize(20, 20)));
     m_statusbar->setMessage(message);
 
     // the success status will only be shown shortly
@@ -265,23 +277,16 @@ void Module::setStatusSuccess(QString message) {
 }
 
 void Module::setStatusWorking(QString message) {
-    m_statusbar->setStyleSheet(QString("background-color: rgb(40, 147, 247);"));
+    m_statusbar->setStyleSheet(QString("background-color: hsv(209, 84%, 97%);"));
 
-    m_statusbar->setIcon(QString(QChar(0x2B6F)));
-    m_statusbar->setMessage(message);
-}
-
-void Module::setStatusOK(QString message) {
-    m_statusbar->setStyleSheet(QString("background-color: rgb(152, 14, 227);"));
-
-    m_statusbar->setIcon(QString(QChar(0x276E)) + QString(QChar(0x002F)) + QString(QChar(0x276F)));
+    m_statusbar->setIcon(QIcon(":/icons/dark_working.svg").pixmap(QSize(20, 20)));
     m_statusbar->setMessage(message);
 }
 
 void Module::setStatusFail(QString message) {
-    m_statusbar->setStyleSheet(QString("background-color: rgb(201, 26, 26);"));
+    m_statusbar->setStyleSheet(QString("background-color: hsv(0, 87%, 79%);"));
 
-    m_statusbar->setIcon(QString(QChar(0x2A2F)));
+    m_statusbar->setIcon(QIcon(":/icons/dark_error.svg").pixmap(QSize(20, 20)));
     m_statusbar->setMessage(message);
 }
 

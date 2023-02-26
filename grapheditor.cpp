@@ -21,6 +21,7 @@ GraphEditor::GraphEditor(DataFrame *p_dataFrame, QWidget *parent)
 {
     // create new QChart
     m_chart = new QChart;
+    m_chart->setTheme(QChart::ChartThemeDark);
 
     // set QMaps
     checkBoxes = new QMap<QString, QCheckBox*>;
@@ -102,7 +103,7 @@ void GraphEditor::setupDrawer() {
             drawerLayout->addWidget(checkBox, row, 0);
 
             connect(colorButton, &QPushButton::pressed, [this, key](){
-                QColorDialog *colorDialog = new QColorDialog;
+                QColorDialog *colorDialog = new QColorDialog(this);
 
                 connect(colorDialog, &QColorDialog::colorSelected, series->find(key).value(), &DataSeries::setColor);
                 connect(colorDialog, &QColorDialog::colorSelected, [this, key](QColor color){

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
 <layout NUM="2">
-    <workspace TITLE="Analyse">
+    <workspace TITLE="Analyse" ICON=":/icons/dark_analyse.svg">
         <splitter RATIO="0.8" ORIENTATION="horizontal">
             <splitter RATIO="0.3" ORIENTATION="vertical">
                 <splitter RATIO="0.3" ORIENTATION="horizontal">
@@ -13,7 +13,7 @@
             <module>3</module>
         </splitter>
     </workspace>
-    <workspace TITLE="Trace">
+    <workspace TITLE="Trace" ICON=":/icons/dark_trace.svg">
         <splitter RATIO="0.8" ORIENTATION="horizontal">
             <splitter RATIO="0.7" ORIENTATION="vertical">
                 <module>5</module>

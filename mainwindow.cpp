@@ -8,6 +8,7 @@
 #include <QSizePolicy>
 
 #include <QFile>
+#include <QFontDatabase>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -27,16 +28,36 @@ MainWindow::MainWindow(QWidget *parent)
     // set title
     setWindowTitle(QString("Ground Control"));
 
+    // set icon
+    setWindowIcon(QIcon(":/icons/GroundControl.svg"));
+
     // set layout
     QDomDocument *xml = new QDomDocument;
     QFile layoutFile(":/layouts/default.xml");
 
     if (layoutFile.open(QIODevice::ReadOnly)) {
         xml->setContent(&layoutFile);
+        parseLayout(xml);
     }
 
-    layoutFile.close();
-    parseLayout(xml);
+
+    // load roboto font
+    QStringList weights = {"Black", "BlackItalic", "Bold", "BoldItalic", "Italic", "Light", "LightItalic", "Medium", "MediumItalic", "Regular", "Thin", "ThinItalic"};
+
+    for (QString w : weights) {
+        QFontDatabase::addApplicationFont(":/fonts/Roboto-"+w+".ttf");
+    }
+
+    // set theme
+    QFile styleFile(":/themes/stylesheet.qss");
+    QFile themeFile(":/themes/darktheme.xml");
+
+    if (styleFile.open(QFile::ReadOnly | QIODevice::Text) && themeFile.open(QIODevice::ReadOnly)) {
+        QString str = styleFile.readAll();
+        xml->setContent(&themeFile);
+
+        parseStylesheet(xml, str);
+    }
 }
 
 MainWindow::~MainWindow() {
@@ -51,13 +72,15 @@ void MainWindow::parseLayout(QDomDocument *xml) {
 
     for(int i = 0; !element.isNull(); ++i) {
         QString title = element.attribute("TITLE", "NoTitle");
+        QString icon = element.attribute("ICON", "NoIcon");
 
-        // assert if no title is given
+        // assert if no title nor icon is given
         assert(title != "NoTitle");
+        assert(icon != "NoIcon");
 
         // create workspace
         Workspace *workspace = new Workspace;
-        m_tabWidget->addTab(workspace, title);
+        m_tabWidget->addTab(workspace, QIcon(icon), title);
 
         // create new module
         Module *m = new Module(m_dataFrame, workspace);
@@ -99,6 +122,25 @@ void MainWindow::parseModule(Workspace *w, Module *m, QDomElement e) {
         int index = e.text().toInt();
         m->changeComboBox(index);
     }
+}
+
+void MainWindow::parseStylesheet(QDomDocument *xml, QString &str) {
+    QDomElement palette = xml->documentElement();
+
+    // go through all elements
+    QDomElement element = palette.firstChildElement();
+
+    while(!element.isNull()) {
+        QString name = element.attribute("NAME", "noName");
+        QString color = element.text();
+        assert(name != "noName");
+
+        str.replace(name, color);
+        element = element.nextSiblingElement();
+    }
+
+    // set stylesheet
+    setStyleSheet(str);
 }
 
 void MainWindow::on_actionNew_Editor_triggered() {

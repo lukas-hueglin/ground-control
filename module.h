@@ -32,6 +32,7 @@ private:
 class Statusbar : public QWidget
 {
     Q_OBJECT
+
 public:
     explicit Statusbar(Module *parent = nullptr);
 
@@ -39,7 +40,7 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-    void setIcon(QString str);
+    void setIcon(QPixmap pixmap);
     void setMessage(QString str);
 
 private:
@@ -74,9 +75,9 @@ public:
     QSize minimumSizeHint() const override;
 
 public slots:
+    void setStatusOK(QString message = QString());
     void setStatusSuccess(QString message = QString());
     void setStatusWorking(QString message = QString());
-    void setStatusOK(QString message = QString());
     void setStatusFail(QString message = QString());
 
     void makeFloating();

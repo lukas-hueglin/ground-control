@@ -142,7 +142,7 @@ void GlobeEditor::setupDrawer() {
 
 void GlobeEditor::setupAircraft() {
     // create a aircraft model.
-    QUrl aircraftURL = QUrl("C:/Users/lukas/OneDrive/Desktop/GliderAircraft/GliderAircraft.obj");
+    QUrl aircraftURL = QUrl("C:/Users/lukas/DocumentsLocal/QtProjects/ground-control/GliderAircraft.obj");
     ModelSceneSymbol* aircraftModel = new ModelSceneSymbol(aircraftURL, 10.0, this);
 
     // create graphic

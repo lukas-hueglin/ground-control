@@ -1,0 +1,233 @@
+/* reset elements -------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+* {
+    font-family: "Roboto";
+    padding: 0px;
+    margin: 0px;
+    border: 0px;
+    border-style: none;
+    border-image: none;
+    outline: 0;
+}
+
+/* specific reset for elements inside QToolBar */
+QToolBar * {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* QWidget --------------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QWidget {
+    background-color: @Primary01;
+    border: 0px;
+    border-radius: 5px;
+    color: @Text01;
+    padding: 0px;
+    selection-background-color: @Primary01;
+    selection-color: @Text01;
+}
+
+QWidget:disabled {
+  background-color: @Primary03;
+  color: @Text02;
+  selection-background-color: @Primary03;
+  selection-color: @Text02;
+}
+
+/* QMainWindow ----------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QMainWindow::separator {
+    background-color: @Emph01;
+    border: 0px;
+    border-radius: 2px;
+    spacing: 0px;
+    padding: 2px;
+}
+
+QMainWindow::separator:hover {
+    background-color: @Emph02;
+    border: 0px;
+}
+
+QMainWindow::separator:horizontal {
+    width: 4px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+QMainWindow::separator:vertical {
+    height: 4px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+/* QTabWidget -----------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QTabWidget::pane {
+    border: 0px;
+}
+
+QTabWidget::tab-bar {
+    left: 5px;
+}
+
+QTabBar::tab {
+    background-color: @Secondary01;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    min-width: 8ex;
+    padding: 2px;
+}
+
+QTabBar::tab:hover {
+    background-color: @Secondary02;
+}
+
+QTabBar::tab:selected {
+    background-color: @Secondary02;
+    border-bottom: 2px solid @Emph02;
+}
+
+QTabBar::tab:!selected {
+    margin-top: 2px;
+}
+
+/* QPushButton ----------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QPushButton {
+    background-color: @Secondary01;
+    border: 0px;
+    border-radius: 4px;
+    padding: 2px 4px;
+}
+
+QPushButton:pressed, QPushButton:hover {
+    background-color: @Secondary02;
+}
+
+/* QComboBox ------------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QComboBox {
+    background-color: @Secondary01;
+    border: 0px;
+    border-radius: 4px;
+    padding: 2px 4px ;
+}
+
+QComboBox:pressed, QComboBox:hover {
+    background-color: @Secondary02;
+}
+
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 15px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+QComboBox::down-arrow {
+    image: url(":/icons/@theme_arrow_drop_down.svg");
+    width:20px;
+}
+
+
+/* QLineEdit ------------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QLineEdit {
+    background-color: @Primary02;
+    border-bottom: 2px solid @Emph01;
+    border-radius: 4px;
+}
+
+/* QGroupBox ------------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QGroupBox {
+    background-color: @Primary02;
+}
+
+/* QCheckBox ------------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QCheckBox {
+    background-color: @Primary02;
+}
+
+QCheckBox::indicator {
+    width: 25px;
+    height: 25px;
+}
+
+QCheckBox::indicator:checked {
+    image: url(":/icons/@theme_toggle_on.svg");
+}
+
+QCheckBox::indicator:unchecked {
+    image: url(":/icons/@theme_toggle_off.svg");
+}
+
+/* QToolButton ----------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QToolButton {
+    background-color: @Primary02;
+    border-radius: 6px;
+}
+
+QToolButton::right-arrow {
+    image: url(":/icons/@theme_chevron_right.svg");
+}
+
+QToolButton::left-arrow {
+    image: url(":/icons/@theme_chevron_left.svg");
+}
+
+QDockWidget {
+    border: 3px solid white;
+}
+
+/* cssClass -------------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+*[cssClass~="dashlabel"] {
+    font-size: 12pt;
+}
+
+*[cssClass~="dashvalue"] {
+    font-size: 18pt;
+    font-weight: 200;
+}
+
+*[cssClass~="splitH"] {
+    qproperty-icon: url(":/icons/@theme_split_horizontal.svg");
+    padding: 2px;
+}
+
+*[cssClass~="splitV"] {
+    qproperty-icon: url(":/icons/@theme_split_vertical.svg");
+    padding: 2px;
+}
+
+*[cssClass~="float"] {
+    qproperty-icon: url(":/icons/@theme_float.svg");
+    padding: 2px;
+}
+
+*[cssClass~="close"] {
+    background-color: @Close01;
+    qproperty-icon: url(":/icons/@theme_close.svg");
+    padding: 2px;
+}
+
+*[cssClass~="close"]:pressed, *[cssClass~="close"]:hover {
+    background-color: @Close02;
+}

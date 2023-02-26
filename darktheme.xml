@@ -1,0 +1,25 @@
+
+<palette>
+    <placeholder NAME="@theme">dark</placeholder>
+
+    <color NAME="@Primary01">hsv(240, 4%, 15%)</color>
+    <color NAME="@Primary02">hsv(240, 4%, 13%)</color>
+    <color NAME="@Primary03">hsv(240, 4%, 10%)</color>
+
+    <color NAME="@Secondary01">hsv(240, 8%, 20%)</color>
+    <color NAME="@Secondary02">hsv(240, 8%, 25%)</color>
+
+    <color NAME="@Emph01">hsv(215, 30%, 40%)</color>
+    <color NAME="@Emph02">hsv(215, 30%, 60%)</color>
+
+    <color NAME="@Text01">hsv(240, 1%, 90%)</color>
+    <color NAME="@Text02">hsv(240, 1%, 60%)</color>
+
+    <color NAME="@Close01">hsv(0, 100%, 100%)</color>
+    <color NAME="@Close02">hsv(0, 50%, 100%)</color>
+
+    <color NAME="@OK">hsv(279, 94%, 89%)</color>
+    <color NAME="@Success">hsv(117, 76%, 73%)</color>
+    <color NAME="@Working">hsv(209, 84%, 97%)</color>
+    <color NAME="@Fail">hsv(0, 87%, 79%)</color>
+</palette>

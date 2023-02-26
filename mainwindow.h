@@ -30,6 +30,8 @@ private:
     void parseLayout(QDomDocument *xml);
     void parseModule(Workspace *w, Module *fm, QDomElement e);
 
+    void parseStylesheet(QDomDocument *xml, QString &str);
+
 private slots:
     void on_actionNew_Editor_triggered();
 
