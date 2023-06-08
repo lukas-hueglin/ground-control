@@ -16,6 +16,9 @@ struct DashboardLabel : public QDockWidget
 public:
     DashboardLabel(DataFrame *p_dataFrame, QString strLabel, QString strValue, QWidget *parent = nullptr);
 
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
+
     DataFrame *m_dataFrame;
 
     QLabel* label;

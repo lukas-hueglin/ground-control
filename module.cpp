@@ -18,6 +18,7 @@ Titlebar::Titlebar(Module *parent)
 {
     // create a QHBoxLayout
     QHBoxLayout *titleLayout = new QHBoxLayout;
+    titleLayout->setContentsMargins(7, 7, 7, 7);
     setLayout(titleLayout);
 
     // add a QComboBox
@@ -67,7 +68,7 @@ Titlebar::Titlebar(Module *parent)
 }
 
 QSize Titlebar::sizeHint() const {
-    return QSize(300, 50);
+    return QSize(300, 35);
 }
 
 QSize Titlebar::minimumSizeHint() const {
@@ -163,7 +164,7 @@ Module::Module(DataFrame *p_dataFrame, Workspace *parent)
     setWidget(container);
     container->setLayout(m_layout);
 
-    m_layout->addWidget(m_editor, 1);
+    m_layout->addWidget(m_editor);
     m_layout->addWidget(m_statusbar);
 }
 

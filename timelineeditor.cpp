@@ -14,6 +14,7 @@ TimelineEditor::TimelineEditor(DataFrame *p_dataFrame, QWidget *parent)
 
     // create QGridLayout
     QGridLayout *layout = new QGridLayout(m_viewport);
+    layout->setContentsMargins(0, 0, 0, 0);
     m_viewport->setLayout(layout);
 
 

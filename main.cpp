@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     MainWindow w;
 
     // create dark palette for dark title bar
-    a.setStyle(QStyleFactory::create("Fusion"));
+    //a.setStyle(QStyleFactory::create("Fusion"));
 
     QPalette darkPalette;
     darkPalette.setColor(QPalette::Window, Qt::black);

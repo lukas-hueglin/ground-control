@@ -1,0 +1,12 @@
+
+<palette>
+    <color NAME="time">#e3e4e6</color>
+    <color NAME="gps_n">#6785e6</color>
+    <color NAME="gps_e">#e66767</color>
+    <color NAME="height">#67e6b7</color>
+    <color NAME="ground speed">#67bce6</color>
+    <color NAME="roll">#e66767</color>
+    <color NAME="pitch">#6de667</color>
+    <color NAME="yaw">#6785e6</color>
+    <color NAME="battery">#e6c667</color>
+</palette>

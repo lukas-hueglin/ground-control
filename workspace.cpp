@@ -16,6 +16,9 @@ Workspace::Workspace(MainWindow *parent)
 
     // no central widget
     setCentralWidget(nullptr);
+
+    // set cssClass Property
+    setProperty("cssClass", "workspace");
 }
 
 void Workspace::addModule(Module *m) {

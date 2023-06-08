@@ -41,7 +41,7 @@ QWidget:disabled {
 -----------------------------------------------------------------------------*/
 
 QMainWindow::separator {
-    background-color: @Emph01;
+    background-color: @Secondary01;
     border: 0px;
     border-radius: 2px;
     spacing: 0px;
@@ -49,7 +49,7 @@ QMainWindow::separator {
 }
 
 QMainWindow::separator:hover {
-    background-color: @Emph02;
+    background-color: @Secondary02;
     border: 0px;
 }
 
@@ -63,6 +63,19 @@ QMainWindow::separator:vertical {
     height: 4px;
     margin-left: 2px;
     margin-right: 2px;
+}
+
+QMainWindow[cssClass~="workspace"]::separator {
+    background-color: @Emph01;
+    border: 0px;
+    border-radius: 2px;
+    spacing: 0px;
+    padding: 2px;
+}
+
+QMainWindow[cssClass~="workspace"]::separator:hover {
+    background-color: @Emph02;
+    border: 0px;
 }
 
 /* QTabWidget -----------------------------------------------------------------
@@ -163,9 +176,10 @@ QCheckBox {
 }
 
 QCheckBox::indicator {
-    width: 25px;
-    height: 25px;
+    width: 20px;
+    height: 20px;
 }
+
 
 QCheckBox::indicator:checked {
     image: url(":/icons/@theme_toggle_on.svg");
@@ -193,6 +207,28 @@ QToolButton::left-arrow {
 
 QDockWidget {
     border: 3px solid white;
+}
+
+/* QSlider --------------------------------------------------------------------
+-----------------------------------------------------------------------------*/
+
+QSlider::groove:horizontal {
+    background-color: @Secondary02;
+    border: 0px;
+    height: 8px;
+    margin: 2px 0;
+}
+
+QSlider::handle:horizontal {
+    background-color: @Emph01;
+    border: 0px;
+    width: 12px;
+    margin: -2px 0;
+    border-radius: 3px;
+}
+
+QSlider::handle:horizontal:hover {
+    background-color: @Emph02;
 }
 
 /* cssClass -------------------------------------------------------------------

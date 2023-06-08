@@ -13,6 +13,7 @@
     <qresource prefix="/themes">
         <file>stylesheet.qss</file>
         <file>darktheme.xml</file>
+        <file>colorpresets.xml</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>Roboto-Black.ttf</file>
