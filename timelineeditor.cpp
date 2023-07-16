@@ -17,6 +17,9 @@ TimelineEditor::TimelineEditor(DataFrame *p_dataFrame, QWidget *parent)
     layout->setContentsMargins(0, 0, 0, 0);
     m_viewport->setLayout(layout);
 
+    // create QLabel as viewport
+    failLabel = new QLabel(QString("Load a log file first!"), m_viewport);
+    failLabel->setAlignment(Qt::AlignCenter);
 
     // check if log file is already loaded
     if (m_dataFrame->isAlreadySetup()){
@@ -26,10 +29,6 @@ TimelineEditor::TimelineEditor(DataFrame *p_dataFrame, QWidget *parent)
         properlySetup = true;
     }
     else {
-        // create QLabel as viewport
-        failLabel = new QLabel(QString("Load a log file first!"), m_viewport);
-        failLabel->setAlignment(Qt::AlignCenter);
-
         // set viewport
         layout->addWidget(failLabel, 0, 0, 1, 1);
 

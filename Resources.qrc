@@ -33,6 +33,7 @@
         <file>dark_analyse.svg</file>
         <file>dark_arrow_drop_down.svg</file>
         <file>dark_arrow_drop_up.svg</file>
+        <file>dark_artificial_horizon.svg</file>
         <file>dark_chevron_left.svg</file>
         <file>dark_chevron_right.svg</file>
         <file>dark_close.svg</file>
@@ -56,6 +57,7 @@
         <file>light_analyse.svg</file>
         <file>light_arrow_drop_down.svg</file>
         <file>light_arrow_drop_up.svg</file>
+        <file>light_artificial_horizon.svg</file>
         <file>light_chevron_left.svg</file>
         <file>light_chevron_right.svg</file>
         <file>light_close.svg</file>
@@ -77,5 +79,15 @@
         <file>light_trace.svg</file>
         <file>light_working.svg</file>
         <file>GroundControl.svg</file>
+    </qresource>
+    <qresource prefix="/ah">
+        <file>artificialhorizon_main_mask.png</file>
+        <file>artificialhorizon_main.png</file>
+        <file>artificialhorizon_scale01.png</file>
+        <file>artificialhorizon_arrow.png</file>
+        <file>artificialhorizon_shield_mask.png</file>
+        <file>artificialhorizon_clear.png</file>
+        <file>artificialhorizon_overlay.png</file>
+        <file>artificialhorizon_compass.png</file>
     </qresource>
 </RCC>

@@ -27,6 +27,10 @@ GraphEditor::GraphEditor(DataFrame *p_dataFrame, QWidget *parent)
     colorButtons = new QMap<QString, QPushButton*>;
     series = new QMap<QString, DataSeries*>;
 
+    // create QLabel as viewport
+    failLabel = new QLabel(QString("Load a log file first!"), parent);
+    failLabel->setAlignment(Qt::AlignCenter);
+
     // check if log file is already loaded
     if (m_dataFrame->isAlreadySetup()){
         setupGraph();
@@ -36,9 +40,6 @@ GraphEditor::GraphEditor(DataFrame *p_dataFrame, QWidget *parent)
         properlySetup = true;
     }
     else {
-        // create QLabel as viewport
-        failLabel = new QLabel(QString("Load a log file first!"), parent);
-        failLabel->setAlignment(Qt::AlignCenter);
 
         m_viewport = failLabel;
 
@@ -149,9 +150,16 @@ void GraphEditor::setupGraph() {
     // remove legend
     QVector<double> *times = m_dataFrame->getTimes();
 
-    for(QString key : *m_dataFrame->getKeys()){
+    for (QString key : *m_dataFrame->getKeys()){
         if (key != QString("time")) {
             QVector<double> *values = m_dataFrame->getValues(key);
+            QVector<double> *v = new QVector<double>;
+            QVector<double> *t = new QVector<double>;
+
+            for (int i = 0; i<values->size(); i+=50) {
+                v->append(values->at(i));
+                t->append(times->at(i));
+            }
 
             m_plot->addGraph();
             m_plot->graph()->setName(key);
@@ -159,7 +167,7 @@ void GraphEditor::setupGraph() {
             m_plot->graph()->setLineStyle(QCPGraph::lsLine);
             setGraphColor(*m_dataFrame->getColor(key));
 
-            m_plot->graph()->setData(*times, *values);
+            m_plot->graph()->setData(*t, *v);
         }
     }
 
