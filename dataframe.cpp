@@ -94,7 +94,7 @@ bool DataFrame::isAlreadySetup() {
 
 void DataFrame::setTime(unsigned int p_time) {
     m_time = p_time;
-    emit onTimeChanged(m_time);
+    emit onTimeChanged(qMin(m_time, m_size-2));
 }
 
 void DataFrame::setPlayState(bool p_play) {
@@ -196,7 +196,7 @@ void DataFrame::setFile(QFile *p_file){
 void DataFrame::increaseSpeed() {
     m_speed *= 2;
 
-    if (m_speed > 32) {
+    if (m_speed > 512) {
         m_speed = 1;
     }
     emit onSpeedIncreased(m_speed);
@@ -209,8 +209,8 @@ void DataFrame::playLoop() {
 
         int ms = t1->daysTo(*t2)*1000*60*60*24 + t1->time().msecsTo(t2->time());
 
-        emit onTimeChanged(++m_time);
-        QTimer::singleShot(ms/m_speed, [this](){playLoop();});
+        emit onTimeChanged(qMin(m_time + m_speed, m_size-2));
+        QTimer::singleShot(ms, [this](){playLoop();});
     }
 }
 

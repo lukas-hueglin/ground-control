@@ -4,7 +4,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 
-ARCGIS_RUNTIME_VERSION = 200.0.0
+ARCGIS_RUNTIME_VERSION = 200.1.0
 include($$PWD/arcgisruntime.pri)
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -12,6 +12,8 @@ include($$PWD/arcgisruntime.pri)
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    aheditor.cpp \
+    artificialhorizon.cpp \
     dashboardeditor.cpp \
     dataframe.cpp \
     dataseries.cpp \
@@ -29,6 +31,8 @@ SOURCES += \
     qcustomplot.cpp
 
 HEADERS += \
+    aheditor.h \
+    artificialhorizon.h \
     dashboardeditor.h \
     dataframe.h \
     dataseries.h \

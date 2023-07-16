@@ -6,7 +6,7 @@
             <splitter RATIO="0.3" ORIENTATION="vertical">
                 <splitter RATIO="0.3" ORIENTATION="horizontal">
                     <module>2</module>
-                    <module>4</module>
+                    <module>7</module>
                 </splitter>
                 <module>1</module>
             </splitter>

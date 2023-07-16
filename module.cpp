@@ -11,6 +11,7 @@
 #include "dashboardeditor.h"
 #include "globeeditor.h"
 #include "mapeditor.h"
+#include "aheditor.h"
 
 
 Titlebar::Titlebar(Module *parent)
@@ -32,6 +33,7 @@ Titlebar::Titlebar(Module *parent)
     m_comboBox->addItem(QIcon(":/icons/dark_dashboard.svg"), QString("Dashboard Editor"));
     m_comboBox->addItem(QIcon(":/icons/dark_globe.svg"), QString("Globe Editor"));
     m_comboBox->addItem(QIcon(":/icons/dark_map.svg"), QString("Map Editor"));
+    m_comboBox->addItem(QIcon(":/icons/dark_artificial_horizon.svg"), QString("Artificial Horizon"));
 
     titleLayout->addWidget(m_comboBox);
     titleLayout->addStretch();
@@ -223,6 +225,12 @@ void Module::changeEditor(const int index) {
             m_layout->removeWidget(m_editor);
             delete m_editor;
             m_editor = new MapEditor(m_dataFrame, this);
+            m_layout->insertWidget(0, m_editor, 1);
+            break;
+        case 7:
+            m_layout->removeWidget(m_editor);
+            delete m_editor;
+            m_editor = new AHEditor(m_dataFrame, this);
             m_layout->insertWidget(0, m_editor, 1);
             break;
     }
