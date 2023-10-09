@@ -1,4 +1,4 @@
-#include "globeeditor.h"
+#include "editors/globeeditor.h"
 
 #ifdef PCH_BUILD
 #include "pch.hpp"
@@ -142,7 +142,7 @@ void GlobeEditor::setupDrawer() {
 
 void GlobeEditor::setupAircraft() {
     // create a aircraft model.
-    QUrl aircraftURL = QUrl("C:/Users/lukas/Documents/QtProjects/ground-control/GliderAircraft.obj");
+    QUrl aircraftURL = QUrl("C:/Users/lukas/Documents/QtProjects/ground-control/style/models/GliderAircraft.obj");
     ModelSceneSymbol* aircraftModel = new ModelSceneSymbol(aircraftURL, 10.0, this);
 
     // create graphic

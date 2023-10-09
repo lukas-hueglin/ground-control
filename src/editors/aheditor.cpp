@@ -1,5 +1,5 @@
-#include "aheditor.h"
-#include "artificialhorizon.h"
+#include "editors/aheditor.h"
+#include "helpers/artificialhorizon.h"
 
 
 AHEditor::AHEditor(DataFrame *p_dataFrame, QWidget *parent)

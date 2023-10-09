@@ -1,4 +1,4 @@
-#include "timelineeditor.h"
+#include "editors/timelineeditor.h"
 
 #include <QGridLayout>
 #include <QDateTime>

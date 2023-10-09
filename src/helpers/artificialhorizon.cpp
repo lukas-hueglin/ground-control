@@ -1,4 +1,4 @@
-#include "artificialhorizon.h"
+#include "helpers/artificialhorizon.h"
 
 #include <QPainter>
 #include <QPaintEvent>

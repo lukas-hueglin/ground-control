@@ -1,4 +1,4 @@
-#include "dashboardeditor.h"
+#include "editors/dashboardeditor.h"
 #include "qdatetime.h"
 
 #include <QCheckBox>

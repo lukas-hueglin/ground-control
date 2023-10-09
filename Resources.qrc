@@ -1,93 +1,93 @@
 <RCC>
     <qresource prefix="/apiKey">
-        <file>key.txt</file>
+        <file alias="key.txt">arcgis/key.txt</file>
     </qresource>
     <qresource prefix="/aircraftAssets">
-        <file>GliderAircraft.obj</file>
-        <file>GliderAircraft.mtl</file>
-        <file>GliderAircraft.png</file>
+        <file alias="GliderAircraft.obj">style/models/GliderAircraft.obj</file>
+        <file alias="GliderAircraft.mtl">style/models/GliderAircraft.mtl</file>
+        <file alias="GliderAircraft.png">style/bitmaps/GliderAircraft.png</file>
     </qresource>
     <qresource prefix="/layouts">
-        <file>default.xml</file>
+        <file alias="default.xml">style/default.xml</file>
     </qresource>
     <qresource prefix="/themes">
-        <file>stylesheet.qss</file>
-        <file>darktheme.xml</file>
-        <file>colorpresets.xml</file>
+        <file alias="stylesheet.qss">style/stylesheet.qss</file>
+        <file alias="darktheme.xml">style/darktheme.xml</file>
+        <file alias="colorpresets.xml">style/colorpresets.xml</file>
     </qresource>
     <qresource prefix="/fonts">
-        <file>Roboto-Black.ttf</file>
-        <file>Roboto-BlackItalic.ttf</file>
-        <file>Roboto-Bold.ttf</file>
-        <file>Roboto-BoldItalic.ttf</file>
-        <file>Roboto-Italic.ttf</file>
-        <file>Roboto-Light.ttf</file>
-        <file>Roboto-LightItalic.ttf</file>
-        <file>Roboto-Medium.ttf</file>
-        <file>Roboto-MediumItalic.ttf</file>
-        <file>Roboto-Regular.ttf</file>
-        <file>Roboto-Thin.ttf</file>
-        <file>Roboto-ThinItalic.ttf</file>
+        <file alias="Roboto-Black.ttf">style/fonts/roboto/Roboto-Black.ttf</file>
+        <file alias="Roboto-BlackItalic.ttf">style/fonts/roboto/Roboto-BlackItalic.ttf</file>
+        <file alias="Roboto-Bold.ttf">style/fonts/roboto/Roboto-Bold.ttf</file>
+        <file alias="Roboto-BoldItalic.ttf">style/fonts/roboto/Roboto-BoldItalic.ttf</file>
+        <file alias="Roboto-Italic.ttf">style/fonts/roboto/Roboto-Italic.ttf</file>
+        <file alias="Roboto-Light.ttf">style/fonts/roboto/Roboto-Light.ttf</file>
+        <file alias="Roboto-LightItalic.ttf">style/fonts/roboto/Roboto-LightItalic.ttf</file>
+        <file alias="Roboto-Medium.ttf">style/fonts/roboto/Roboto-Medium.ttf</file>
+        <file alias="Roboto-MediumItalic.ttf">style/fonts/roboto/Roboto-MediumItalic.ttf</file>
+        <file alias="Roboto-Regular.ttf">style/fonts/roboto/Roboto-Regular.ttf</file>
+        <file alias="Roboto-Thin.ttf">style/fonts/roboto/Roboto-Thin.ttf</file>
+        <file alias="Roboto-ThinItalic.ttf">style/fonts/roboto/Roboto-ThinItalic.ttf</file>
     </qresource>
     <qresource prefix="/icons">
-        <file>dark_analyse.svg</file>
-        <file>dark_arrow_drop_down.svg</file>
-        <file>dark_arrow_drop_up.svg</file>
-        <file>dark_artificial_horizon.svg</file>
-        <file>dark_chevron_left.svg</file>
-        <file>dark_chevron_right.svg</file>
-        <file>dark_close.svg</file>
-        <file>dark_dashboard.svg</file>
-        <file>dark_empty.svg</file>
-        <file>dark_error.svg</file>
-        <file>dark_float.svg</file>
-        <file>dark_globe.svg</file>
-        <file>dark_graph.svg</file>
-        <file>dark_input.svg</file>
-        <file>dark_map.svg</file>
-        <file>dark_OK.svg</file>
-        <file>dark_split_horizontal.svg</file>
-        <file>dark_split_vertical.svg</file>
-        <file>dark_success.svg</file>
-        <file>dark_timeline.svg</file>
-        <file>dark_toggle_off.svg</file>
-        <file>dark_toggle_on.svg</file>
-        <file>dark_trace.svg</file>
-        <file>dark_working.svg</file>
-        <file>light_analyse.svg</file>
-        <file>light_arrow_drop_down.svg</file>
-        <file>light_arrow_drop_up.svg</file>
-        <file>light_artificial_horizon.svg</file>
-        <file>light_chevron_left.svg</file>
-        <file>light_chevron_right.svg</file>
-        <file>light_close.svg</file>
-        <file>light_dashboard.svg</file>
-        <file>light_empty.svg</file>
-        <file>light_error.svg</file>
-        <file>light_float.svg</file>
-        <file>light_globe.svg</file>
-        <file>light_graph.svg</file>
-        <file>light_input.svg</file>
-        <file>light_map.svg</file>
-        <file>light_OK.svg</file>
-        <file>light_split_horizontal.svg</file>
-        <file>light_split_vertical.svg</file>
-        <file>light_success.svg</file>
-        <file>light_timeline.svg</file>
-        <file>light_toggle_off.svg</file>
-        <file>light_toggle_on.svg</file>
-        <file>light_trace.svg</file>
-        <file>light_working.svg</file>
-        <file>GroundControl.svg</file>
+        <file alias="dark_analyse.svg">style/icons/dark_analyse.svg</file>
+        <file alias="dark_arrow_drop_down.svg">style/icons/dark_arrow_drop_down.svg</file>
+        <file alias="dark_arrow_drop_up.svg">style/icons/dark_arrow_drop_up.svg</file>
+        <file alias="dark_artificial_horizon.svg">style/icons/dark_artificial_horizon.svg</file>
+        <file alias="dark_chevron_left.svg">style/icons/dark_chevron_left.svg</file>
+        <file alias="dark_chevron_right.svg">style/icons/dark_chevron_right.svg</file>
+        <file alias="dark_close.svg">style/icons/dark_close.svg</file>
+        <file alias="dark_dashboard.svg">style/icons/dark_dashboard.svg</file>
+        <file alias="dark_empty.svg">style/icons/dark_empty.svg</file>
+        <file alias="dark_error.svg">style/icons/dark_error.svg</file>
+        <file alias="dark_float.svg">style/icons/dark_float.svg</file>
+        <file alias="dark_globe.svg">style/icons/dark_globe.svg</file>
+        <file alias="dark_graph.svg">style/icons/dark_graph.svg</file>
+        <file alias="dark_input.svg">style/icons/dark_input.svg</file>
+        <file alias="dark_map.svg">style/icons/dark_map.svg</file>
+        <file alias="dark_OK.svg">style/icons/dark_OK.svg</file>
+        <file alias="dark_split_horizontal.svg">style/icons/dark_split_horizontal.svg</file>
+        <file alias="dark_split_vertical.svg">style/icons/dark_split_vertical.svg</file>
+        <file alias="dark_success.svg">style/icons/dark_success.svg</file>
+        <file alias="dark_timeline.svg">style/icons/dark_timeline.svg</file>
+        <file alias="dark_toggle_off.svg">style/icons/dark_toggle_off.svg</file>
+        <file alias="dark_toggle_on.svg">style/icons/dark_toggle_on.svg</file>
+        <file alias="dark_trace.svg">style/icons/dark_trace.svg</file>
+        <file alias="dark_working.svg">style/icons/dark_working.svg</file>
+        <file alias="light_analyse.svg">style/icons/light_analyse.svg</file>
+        <file alias="light_arrow_drop_down.svg">style/icons/light_arrow_drop_down.svg</file>
+        <file alias="light_arrow_drop_up.svg">style/icons/light_arrow_drop_up.svg</file>
+        <file alias="light_artificial_horizon.svg">style/icons/light_artificial_horizon.svg</file>
+        <file alias="light_chevron_left.svg">style/icons/light_chevron_left.svg</file>
+        <file alias="light_chevron_right.svg">style/icons/light_chevron_right.svg</file>
+        <file alias="light_close.svg">style/icons/light_close.svg</file>
+        <file alias="light_dashboard.svg">style/icons/light_dashboard.svg</file>
+        <file alias="light_empty.svg">style/icons/light_empty.svg</file>
+        <file alias="light_error.svg">style/icons/light_error.svg</file>
+        <file alias="light_float.svg">style/icons/light_float.svg</file>
+        <file alias="light_globe.svg">style/icons/light_globe.svg</file>
+        <file alias="light_graph.svg">style/icons/light_graph.svg</file>
+        <file alias="light_input.svg">style/icons/light_input.svg</file>
+        <file alias="light_map.svg">style/icons/light_map.svg</file>
+        <file alias="light_OK.svg">style/icons/light_OK.svg</file>
+        <file alias="light_split_horizontal.svg">style/icons/light_split_horizontal.svg</file>
+        <file alias="light_split_vertical.svg">style/icons/light_split_vertical.svg</file>
+        <file alias="light_success.svg">style/icons/light_success.svg</file>
+        <file alias="light_timeline.svg">style/icons/light_timeline.svg</file>
+        <file alias="light_toggle_off.svg">style/icons/light_toggle_off.svg</file>
+        <file alias="light_toggle_on.svg">style/icons/light_toggle_on.svg</file>
+        <file alias="light_trace.svg">style/icons/light_trace.svg</file>
+        <file alias="light_working.svg">style/icons/light_working.svg</file>
+        <file alias="GroundControl.svg">style/icons/GroundControl.svg</file>
     </qresource>
     <qresource prefix="/ah">
-        <file>artificialhorizon_main_mask.png</file>
-        <file>artificialhorizon_main.png</file>
-        <file>artificialhorizon_scale01.png</file>
-        <file>artificialhorizon_arrow.png</file>
-        <file>artificialhorizon_shield_mask.png</file>
-        <file>artificialhorizon_clear.png</file>
-        <file>artificialhorizon_overlay.png</file>
-        <file>artificialhorizon_compass.png</file>
+        <file alias="artificialhorizon_main_mask.png">style/bitmaps/artificialhorizon_main_mask.png</file>
+        <file alias="artificialhorizon_main.png">style/bitmaps/artificialhorizon_main.png</file>
+        <file alias="artificialhorizon_scale01.png">style/bitmaps/artificialhorizon_scale01.png</file>
+        <file alias="artificialhorizon_arrow.png">style/bitmaps/artificialhorizon_arrow.png</file>
+        <file alias="artificialhorizon_shield_mask.png">style/bitmaps/artificialhorizon_shield_mask.png</file>
+        <file alias="artificialhorizon_clear.png">style/bitmaps/artificialhorizon_clear.png</file>
+        <file alias="artificialhorizon_overlay.png">style/bitmaps/artificialhorizon_overlay.png</file>
+        <file alias="artificialhorizon_compass.png">style/bitmaps/artificialhorizon_compass.png</file>
     </qresource>
 </RCC>

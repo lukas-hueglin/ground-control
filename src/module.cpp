@@ -5,13 +5,13 @@
 #include <QStatusBar>
 #include <QTimer>
 
-#include "grapheditor.h"
-#include "inputeditor.h"
-#include "timelineeditor.h"
-#include "dashboardeditor.h"
-#include "globeeditor.h"
-#include "mapeditor.h"
-#include "aheditor.h"
+#include "editors/grapheditor.h"
+#include "editors/inputeditor.h"
+#include "editors/timelineeditor.h"
+#include "editors/dashboardeditor.h"
+#include "editors/globeeditor.h"
+#include "editors/mapeditor.h"
+#include "editors/aheditor.h"
 
 
 Titlebar::Titlebar(Module *parent)

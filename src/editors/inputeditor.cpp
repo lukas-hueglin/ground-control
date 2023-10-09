@@ -1,4 +1,4 @@
-#include "inputeditor.h"
+#include "editors/inputeditor.h"
 
 #include <QGridLayout>
 #include <QFileDialog>

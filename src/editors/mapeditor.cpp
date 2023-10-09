@@ -1,4 +1,4 @@
-#include "mapeditor.h"
+#include "editors/mapeditor.h"
 
 #ifdef PCH_BUILD
 #include "pch.hpp"

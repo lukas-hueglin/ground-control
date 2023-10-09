@@ -1,4 +1,4 @@
-#include "grapheditor.h"
+#include "editors/grapheditor.h"
 
 #include <QLabel>
 

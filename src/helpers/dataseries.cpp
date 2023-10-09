@@ -1,4 +1,4 @@
-#include "dataseries.h"
+#include "helpers/dataseries.h"
 
 #include <QDateTime>
 #include <QTimer>

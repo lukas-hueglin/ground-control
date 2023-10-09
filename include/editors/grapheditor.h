@@ -14,8 +14,8 @@
 #include <QDateTimeAxis>
 #include <QObject>
 
-#include "dataseries.h"
-#include "qcustomplot.h"
+#include "helpers/dataseries.h"
+#include "helpers/qcustomplot.h"
 
 
 class GraphEditor : public Editor
