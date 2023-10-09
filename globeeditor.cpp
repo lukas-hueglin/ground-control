@@ -142,7 +142,7 @@ void GlobeEditor::setupDrawer() {
 
 void GlobeEditor::setupAircraft() {
     // create a aircraft model.
-    QUrl aircraftURL = QUrl("C:/Users/lukas/OneDrive/Desktop/GliderAircraft/GliderAircraft.obj");
+    QUrl aircraftURL = QUrl("C:/Users/lukas/Documents/QtProjects/ground-control/GliderAircraft.obj");
     ModelSceneSymbol* aircraftModel = new ModelSceneSymbol(aircraftURL, 10.0, this);
 
     // create graphic
@@ -232,8 +232,8 @@ void GlobeEditor::setupAircraft() {
     m_groundCamera->setMaxCameraDistance(1000);
 
     // position the plane a third from the bottom of the screen
-    m_aircraftCamera->setTargetVerticalScreenFactor(0.33f);
-    m_groundCamera->setTargetVerticalScreenFactor(0.33f);
+    m_aircraftCamera->setTargetVerticalScreenFactor(0.4f);
+    m_groundCamera->setTargetVerticalScreenFactor(0.4f);
 
     // don't pitch the camera when the plane pitches
     m_aircraftCamera->setAutoPitchEnabled(false);

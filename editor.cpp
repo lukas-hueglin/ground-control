@@ -16,6 +16,7 @@ Editor::Editor(DataFrame *p_dataFrame, QWidget *parent)
 
     // create QHBoxLayout
     m_container = new QHBoxLayout;
+    m_container->setContentsMargins(0, 0, 0, 0);
     setLayout(m_container);
 
     // connect statusbar
@@ -29,6 +30,14 @@ Editor::Editor(DataFrame *p_dataFrame, QWidget *parent)
 
 QWidget* Editor::getViewport() {
     return m_viewport;
+}
+
+QSize Editor::sizeHint() const {
+    return QSize(100, 50);
+}
+
+QSize Editor::minimumSizeHint() const {
+    return QSize(0, 0);
 }
 
 void Editor::setupDrawer() {

@@ -8,7 +8,6 @@
 
 #include "dataframe.h"
 
-
 class Module;
 
 
@@ -20,6 +19,9 @@ public:
 
 public:
     QWidget* getViewport();
+
+    QSize sizeHint() const override;
+    QSize minimumSizeHint() const override;
 
 protected:
     void setupDrawer();

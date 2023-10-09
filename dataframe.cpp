@@ -3,6 +3,8 @@
 #include <QMap>
 #include <QDateTime>
 #include <QTimer>
+#include <QtXml>
+#include <QColor>
 
 
 DataFrame::DataFrame(QFile *p_file, QObject *parent)
@@ -12,8 +14,10 @@ DataFrame::DataFrame(QFile *p_file, QObject *parent)
     m_file = p_file;
 
     // create QLists
-    m_times = new QList<QDateTime*>;
-    m_values = new QList<QMap<QString, float>*>;
+    m_times = new QVector<double>;
+    m_dateTimes = new QVector<QDateTime*>;
+    m_values = new QMap<QString, QVector<double>*>;
+    m_colors = new QMap<QString, QColor*>;
     m_keys = new QList<QString>;
 
     // set size
@@ -42,20 +46,34 @@ DataFrame::DataFrame(QFile *p_file, QObject *parent)
     }
 }
 
+// has to be improved, not nice
 float DataFrame::getValue(QString p_key) {
-    return m_values->at(m_time)->find(p_key).value();
+    return m_values->find(p_key).value()->at(m_time);
 }
 
+// has to be improved, not nice
 float DataFrame::getValue(QString p_key, unsigned int p_time) {
-    return m_values->at(p_time)->find(p_key).value();
+    return m_values->find(p_key).value()->at(p_time);
+}
+
+QColor* DataFrame::getColor(QString p_key){
+    return m_colors->find(p_key).value();
+}
+
+QVector<double>* DataFrame::getValues(QString p_key) {
+    return m_values->find(p_key).value();
+}
+
+QVector<double>* DataFrame::getTimes() {
+    return m_times;
 }
 
 QDateTime* DataFrame::getDateTime() {
-    return m_times->at(m_time);
+    return m_dateTimes->at(m_time);
 }
 
 QDateTime* DataFrame::getDateTime(unsigned int p_time){
-    return m_times->at(p_time);
+    return m_dateTimes->at(p_time);
 }
 
 QList<QString>* DataFrame::getKeys() {
@@ -76,7 +94,7 @@ bool DataFrame::isAlreadySetup() {
 
 void DataFrame::setTime(unsigned int p_time) {
     m_time = p_time;
-    emit onTimeChanged(m_time);
+    emit onTimeChanged(qMin(m_time, m_size-2));
 }
 
 void DataFrame::setPlayState(bool p_play) {
@@ -102,6 +120,9 @@ void DataFrame::setFile(QFile *p_file){
 
     for (QString str : firstLine.split(",")){
         m_keys->append(str);
+
+        QVector<double>* vec = new QVector<double>;
+        m_values->insert(str, vec);
     }
 
     // load all lines
@@ -112,9 +133,6 @@ void DataFrame::setFile(QFile *p_file){
 
         // store single strings in QList
         QList<QString> elements = line.split(",").toList();
-
-        // create QMap
-        QMap<QString, float> *map = new QMap<QString, float>;
 
         // for every col
         for (int i = 0; i < m_keys->size(); ++i){
@@ -132,18 +150,44 @@ void DataFrame::setFile(QFile *p_file){
                 int s = time.split(":").at(2).toInt();
 
                 QDateTime *datetime = new QDateTime(QDate(y, mo, d), QTime(h, mi, s));
-                m_times->append(datetime);
+                m_dateTimes->append(datetime);
+                m_times->append(datetime->toMSecsSinceEpoch());
             }
             // else if it is not time
             else {
-                map->insert(m_keys->at(i), elements.at(i).toFloat());
+                m_values->find(m_keys->at(i)).value()->append(elements.at(i).toFloat());
             }
         }
-
-        m_values->append(map);
     }
 
-    m_size = m_times->size();
+    m_size = m_dateTimes->size();
+
+    // set colors
+    QDomDocument *xml = new QDomDocument;
+    QFile colorFile(":/themes/colorpresets.xml");
+
+    // check if file can be opened
+    if (colorFile.open(QFile::ReadOnly | QIODevice::Text)) {
+        xml->setContent(&colorFile);
+
+        // get palette
+        QDomElement palette = xml->documentElement();
+
+        // go through all elements
+        QDomElement element = palette.firstChildElement();
+
+        while(!element.isNull()) {
+            QString key = element.attribute("NAME", "noName");
+            QColor *color = new QColor(element.text());
+
+            if (key != QString("noName")) {
+                m_colors->insert(key, color);
+            }
+
+            element = element.nextSiblingElement();
+        }
+    }
+
     m_alreadySetup = true;
 
     emit onFileChanged(m_file);
@@ -152,7 +196,7 @@ void DataFrame::setFile(QFile *p_file){
 void DataFrame::increaseSpeed() {
     m_speed *= 2;
 
-    if (m_speed > 32) {
+    if (m_speed > 512) {
         m_speed = 1;
     }
     emit onSpeedIncreased(m_speed);
@@ -160,13 +204,13 @@ void DataFrame::increaseSpeed() {
 
 void DataFrame::playLoop() {
     if (m_play) {
-        QDateTime *t1 = m_times->at(m_time);
-        QDateTime *t2 = m_times->at(m_time+1);
+        QDateTime *t1 = m_dateTimes->at(m_time);
+        QDateTime *t2 = m_dateTimes->at(m_time+1);
 
         int ms = t1->daysTo(*t2)*1000*60*60*24 + t1->time().msecsTo(t2->time());
 
-        emit onTimeChanged(++m_time);
-        QTimer::singleShot(ms/m_speed, [this](){playLoop();});
+        emit onTimeChanged(qMin(m_time + m_speed, m_size-2));
+        QTimer::singleShot(ms, [this](){playLoop();});
     }
 }
 

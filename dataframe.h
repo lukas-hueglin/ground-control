@@ -16,6 +16,11 @@ public:
     float getValue(QString p_key);
     float getValue(QString p_key, unsigned int p_time);
 
+    QColor* getColor(QString p_key);
+
+    QVector<double>* getValues(QString p_key);
+    QVector<double>* getTimes();
+
     QDateTime* getDateTime();
     QDateTime* getDateTime(unsigned int p_time);
 
@@ -44,8 +49,11 @@ signals:
 private:
     QFile *m_file;
 
-    QList<QDateTime*> *m_times;
-    QList<QMap<QString, float>*> *m_values;
+    QVector<double> *m_times;
+    QVector<QDateTime*> *m_dateTimes;
+
+    QMap<QString, QVector<double>*> *m_values;
+    QMap<QString, QColor*> *m_colors;
     QList<QString> *m_keys;
 
     unsigned int m_size;

@@ -1,10 +1,10 @@
-QT       += core gui charts widgets openglwidgets
+QT       += core gui charts widgets openglwidgets xml
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
 CONFIG += c++17
 
-ARCGIS_RUNTIME_VERSION = 200.0.0
+ARCGIS_RUNTIME_VERSION = 200.1.0
 include($$PWD/arcgisruntime.pri)
 
 # You can make your code fail to compile if it uses deprecated APIs.
@@ -12,8 +12,8 @@ include($$PWD/arcgisruntime.pri)
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    callout.cpp \
-    chartview.cpp \
+    aheditor.cpp \
+    artificialhorizon.cpp \
     dashboardeditor.cpp \
     dataframe.cpp \
     dataseries.cpp \
@@ -27,11 +27,12 @@ SOURCES += \
     module.cpp \
     timelineeditor.cpp \
     viewport.cpp \
-    workspace.cpp
+    workspace.cpp \
+    qcustomplot.cpp
 
 HEADERS += \
-    callout.h \
-    chartview.h \
+    aheditor.h \
+    artificialhorizon.h \
     dashboardeditor.h \
     dataframe.h \
     dataseries.h \
@@ -44,7 +45,8 @@ HEADERS += \
     module.h \
     timelineeditor.h \
     viewport.h \
-    workspace.h
+    workspace.h \
+    qcustomplot.h
 
 FORMS += \
     mainwindow.ui
@@ -55,7 +57,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    key.txt
+    colorpresets.xml \
+    darktheme.xml \
+    default.xml \
+    key.txt \
+    stylesheet.qss
 
 RESOURCES += \
     Resources.qrc

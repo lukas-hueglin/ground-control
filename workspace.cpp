@@ -13,6 +13,12 @@ Workspace::Workspace(MainWindow *parent)
 
     // set Module list
     modules = new QList<Module*>;
+
+    // no central widget
+    setCentralWidget(nullptr);
+
+    // set cssClass Property
+    setProperty("cssClass", "workspace");
 }
 
 void Workspace::addModule(Module *m) {

@@ -7,4 +7,87 @@
         <file>GliderAircraft.mtl</file>
         <file>GliderAircraft.png</file>
     </qresource>
+    <qresource prefix="/layouts">
+        <file>default.xml</file>
+    </qresource>
+    <qresource prefix="/themes">
+        <file>stylesheet.qss</file>
+        <file>darktheme.xml</file>
+        <file>colorpresets.xml</file>
+    </qresource>
+    <qresource prefix="/fonts">
+        <file>Roboto-Black.ttf</file>
+        <file>Roboto-BlackItalic.ttf</file>
+        <file>Roboto-Bold.ttf</file>
+        <file>Roboto-BoldItalic.ttf</file>
+        <file>Roboto-Italic.ttf</file>
+        <file>Roboto-Light.ttf</file>
+        <file>Roboto-LightItalic.ttf</file>
+        <file>Roboto-Medium.ttf</file>
+        <file>Roboto-MediumItalic.ttf</file>
+        <file>Roboto-Regular.ttf</file>
+        <file>Roboto-Thin.ttf</file>
+        <file>Roboto-ThinItalic.ttf</file>
+    </qresource>
+    <qresource prefix="/icons">
+        <file>dark_analyse.svg</file>
+        <file>dark_arrow_drop_down.svg</file>
+        <file>dark_arrow_drop_up.svg</file>
+        <file>dark_artificial_horizon.svg</file>
+        <file>dark_chevron_left.svg</file>
+        <file>dark_chevron_right.svg</file>
+        <file>dark_close.svg</file>
+        <file>dark_dashboard.svg</file>
+        <file>dark_empty.svg</file>
+        <file>dark_error.svg</file>
+        <file>dark_float.svg</file>
+        <file>dark_globe.svg</file>
+        <file>dark_graph.svg</file>
+        <file>dark_input.svg</file>
+        <file>dark_map.svg</file>
+        <file>dark_OK.svg</file>
+        <file>dark_split_horizontal.svg</file>
+        <file>dark_split_vertical.svg</file>
+        <file>dark_success.svg</file>
+        <file>dark_timeline.svg</file>
+        <file>dark_toggle_off.svg</file>
+        <file>dark_toggle_on.svg</file>
+        <file>dark_trace.svg</file>
+        <file>dark_working.svg</file>
+        <file>light_analyse.svg</file>
+        <file>light_arrow_drop_down.svg</file>
+        <file>light_arrow_drop_up.svg</file>
+        <file>light_artificial_horizon.svg</file>
+        <file>light_chevron_left.svg</file>
+        <file>light_chevron_right.svg</file>
+        <file>light_close.svg</file>
+        <file>light_dashboard.svg</file>
+        <file>light_empty.svg</file>
+        <file>light_error.svg</file>
+        <file>light_float.svg</file>
+        <file>light_globe.svg</file>
+        <file>light_graph.svg</file>
+        <file>light_input.svg</file>
+        <file>light_map.svg</file>
+        <file>light_OK.svg</file>
+        <file>light_split_horizontal.svg</file>
+        <file>light_split_vertical.svg</file>
+        <file>light_success.svg</file>
+        <file>light_timeline.svg</file>
+        <file>light_toggle_off.svg</file>
+        <file>light_toggle_on.svg</file>
+        <file>light_trace.svg</file>
+        <file>light_working.svg</file>
+        <file>GroundControl.svg</file>
+    </qresource>
+    <qresource prefix="/ah">
+        <file>artificialhorizon_main_mask.png</file>
+        <file>artificialhorizon_main.png</file>
+        <file>artificialhorizon_scale01.png</file>
+        <file>artificialhorizon_arrow.png</file>
+        <file>artificialhorizon_shield_mask.png</file>
+        <file>artificialhorizon_clear.png</file>
+        <file>artificialhorizon_overlay.png</file>
+        <file>artificialhorizon_compass.png</file>
+    </qresource>
 </RCC>

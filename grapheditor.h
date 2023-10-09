@@ -15,6 +15,7 @@
 #include <QObject>
 
 #include "dataseries.h"
+#include "qcustomplot.h"
 
 
 class GraphEditor : public Editor
@@ -24,14 +25,22 @@ class GraphEditor : public Editor
 public:
     GraphEditor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
+    void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+    void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
+
 private:
     void setupDrawer();
     void setupGraph();
 
+    void setGraphColor(QColor color);
+    void setGraphColor(int index, QColor color);
+
+    void onZoomed(QWheelEvent *event);
+
 private:
     QGridLayout *layout;
 
-    QChart *m_chart;
+    QCustomPlot *m_plot;
 
     QMap<QString, QCheckBox*> *checkBoxes;
     QMap<QString, QPushButton*> *colorButtons;
