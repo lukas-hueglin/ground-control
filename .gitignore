@@ -83,3 +83,6 @@ key.txt
 # svg and png files
 *.svg
 *.png
+
+# arcgis layers
+layers/

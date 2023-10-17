@@ -49,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent)
     }
 
     // set theme
-    QFile styleFile(":/themes/stylesheet.qss");
+    QFile styleFile(":/themes/stylesheet.css");
     QFile themeFile(":/themes/darktheme.xml");
 
     if (styleFile.open(QFile::ReadOnly | QIODevice::Text) && themeFile.open(QIODevice::ReadOnly)) {

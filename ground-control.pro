@@ -23,7 +23,7 @@ SOURCES += \
     $$PWD/src/editor.cpp \
     $$PWD/src/editors/globeeditor.cpp \
     $$PWD/src/editors/grapheditor.cpp \
-    $$PWD/src/editors/inputeditor.cpp \
+    $$PWD/src/editors/ioeditor.cpp \
     $$PWD/src/main.cpp \
     $$PWD/src/mainwindow.cpp \
     $$PWD/src/editors/mapeditor.cpp \
@@ -42,7 +42,7 @@ HEADERS += \
     $$PWD/include/editor.h \
     $$PWD/include/editors/globeeditor.h \
     $$PWD/include/editors/grapheditor.h \
-    $$PWD/include/editors/inputeditor.h \
+    $$PWD/include/editors/ioeditor.h \
     $$PWD/include/mainwindow.h \
     $$PWD/include/editors/mapeditor.h \
     $$PWD/include/module.h \
@@ -64,7 +64,7 @@ DISTFILES += \
     $$PWD/style/darktheme.xml \
     $$PWD/style/default.xml \
     $$PWD/arcgis/key.txt \
-    $$PWD/style/stylesheet.qss
+    $$PWD/style/stylesheet.css
 
 RESOURCES += \
     $$PWD/resources.qrc

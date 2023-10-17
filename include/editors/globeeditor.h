@@ -30,6 +30,7 @@ public slots:
 private:
     void setupDrawer();
     void setupAircraft();
+    void changeLayer(const int index);
 
 private:
     Esri::ArcGISRuntime::Scene *m_scene;

@@ -112,11 +112,8 @@ void DashboardEditor::setupDrawer() {
     Editor::setupDrawer();
 
     // create QVBoxLayout
-    QGridLayout *drawerLayout = new QGridLayout(m_drawer);
+    QVBoxLayout *drawerLayout = new QVBoxLayout(m_drawer);
     m_drawer->setLayout(drawerLayout);
-
-    // counter variable for row
-    int row = 0;
 
     for(QString key : *m_dataFrame->getKeys()){
         if (key != QString("time")) {
@@ -125,31 +122,42 @@ void DashboardEditor::setupDrawer() {
 
             QPushButton *colorButton = new QPushButton;
             colorButton->setFixedSize(15, 15);
-            colorButton->setStyleSheet("background-color: black;");
+            colorButton->setStyleSheet("background-color: "+m_dataFrame->getColor(key)->name(QColor::HexRgb));
 
             connect(checkBox, &QCheckBox::clicked, [this, key](bool checked){toggleLabel(key, checked);});
-            drawerLayout->addWidget(checkBox, row, 0);
 
             connect(colorButton, &QPushButton::pressed, [this, key](){
                 QColorDialog *colorDialog = new QColorDialog(this);
 
                 connect(colorDialog, &QColorDialog::colorSelected, [this, key](QColor color){
-                    //labels->find(key).value()->value->setStyleSheet("color: " + color.name() + ";");
+                    labels->find(key).value()->label->setStyleSheet("color: " + color.name() + ";");
                 });
                 connect(colorDialog, &QColorDialog::colorSelected, [this, key](QColor color){
-                    //colorButtons->find(key).value()->setStyleSheet("background-color: " + color.name() + ";");
+                    colorButtons->find(key).value()->setStyleSheet("background-color: " + color.name() + ";");
                 });
 
                 colorDialog->show();
             });
 
-            drawerLayout->addWidget(colorButton, row, 1);
+
+            // create container and add to layout
+            QWidget *container = new QWidget();
+            container->setProperty("cssClass", "drawerItem");
+
+            QHBoxLayout *l = new QHBoxLayout;
+            container->setLayout(l);
+            l->addWidget(checkBox);
+            l->addWidget(colorButton);
+
+            drawerLayout->addWidget(container);
 
             checkBoxes->insert(key, checkBox);
             colorButtons->insert(key, colorButton);
-            ++row;
         }
     }
+
+    // add strech item last
+    drawerLayout->addStretch(1);
 }
 
 void DashboardEditor::setupDashboard() {

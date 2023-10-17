@@ -28,10 +28,18 @@
 #include "PolylineBuilder.h"
 #include "SimpleLineSymbol.h"
 #include "SimpleMarkerSymbol.h"
+#include "Basemap.h"
+#include "ArcGISSceneLayer.h"
+#include "LayerListModel.h"
+#include "RasterLayer.h"
+#include "GeoPackageRaster.h"
+#include "GeoPackage.h"
+#include "Error.h"
 
 #include <QUrl>
 #include <QMainWindow>
 #include <QCheckBox>
+#include <QComboBox>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -39,7 +47,7 @@ GlobeEditor::GlobeEditor(DataFrame *p_dataFrame, QWidget *parent)
     : Editor{p_dataFrame, parent}
 {
     // create a new scene
-    Scene* m_scene = new Scene(BasemapStyle::ArcGISImageryStandard, this);
+    Scene* m_scene = new Scene(BasemapStyle::ArcGISDarkGray, this);
 
     // create a new elevation source
     ArcGISTiledElevationSource* elevationSource = new ArcGISTiledElevationSource(
@@ -48,12 +56,16 @@ GlobeEditor::GlobeEditor(DataFrame *p_dataFrame, QWidget *parent)
     // add the elevation source to scene
     m_scene->baseSurface()->elevationSources()->append(elevationSource);
 
+    // add a scene layer for buildings
+    ArcGISSceneLayer* buildingLayer = new ArcGISSceneLayer(QUrl("https://www.arcgis.com/home/item.html?id=a714a2ca145446b79d97aaa7b895ff95"), this);
+    m_scene->operationalLayers()->append(buildingLayer);
+
     // create new SceneGraphicsView
     m_sceneView = new SceneGraphicsView(this);
     m_sceneView->setArcGISScene(m_scene);
 
     // set atmoshpere effect to realistic
-    //m_sceneView->setAtmosphereEffect(AtmosphereEffect(2));
+    m_sceneView->setAtmosphereEffect(AtmosphereEffect(0));
 
     // set viewport and add to container
     m_viewport = m_sceneView;
@@ -91,6 +103,7 @@ void GlobeEditor::setupDrawer() {
 
     // create QCheckBoxes
     QCheckBox *cameraBox = new QCheckBox("Aircraft Camera", m_drawer);
+    cameraBox->setProperty("cssClass", "drawerItem");
     cameraBox->setChecked(true);
     drawerLayout->addWidget(cameraBox);
     connect(cameraBox, &QCheckBox::clicked, [this](bool state){
@@ -99,6 +112,7 @@ void GlobeEditor::setupDrawer() {
     });
 
     QCheckBox *airPathBox = new QCheckBox("Air Path", m_drawer);
+    airPathBox->setProperty("cssClass", "drawerItem");
     airPathBox->setChecked(true);
     drawerLayout->addWidget(airPathBox);
     connect(airPathBox, &QCheckBox::clicked, [this](bool state){
@@ -111,6 +125,7 @@ void GlobeEditor::setupDrawer() {
     });
 
     QCheckBox *groundPathBox = new QCheckBox("Ground Path", m_drawer);
+    groundPathBox->setProperty("cssClass", "drawerItem");
     groundPathBox->setChecked(true);
     drawerLayout->addWidget(groundPathBox);
     connect(groundPathBox, &QCheckBox::clicked, [this](bool state){
@@ -123,6 +138,7 @@ void GlobeEditor::setupDrawer() {
     });
 
     QCheckBox *beaconBox = new QCheckBox("Beacon", m_drawer);
+    beaconBox->setProperty("cssClass", "drawerItem");
     beaconBox->setChecked(true);
     drawerLayout->addWidget(beaconBox);
     connect(beaconBox, &QCheckBox::clicked, [this, cameraBox](bool state){
@@ -138,6 +154,18 @@ void GlobeEditor::setupDrawer() {
             cameraBox->setEnabled(false);
         }
     });
+
+    QComboBox *layerBox = new QComboBox(m_drawer);
+    layerBox->setProperty("cssClass", "drawerItem");
+
+    QStringList list = {"Dark", "Navigation", "Streets", "Imagery", "Hillshade"};
+    layerBox->addItems(list);
+
+    drawerLayout->addWidget(layerBox);
+    connect(layerBox, &QComboBox::currentIndexChanged, this, &GlobeEditor::changeLayer);
+
+    // add strech item last
+    drawerLayout->addStretch(1);
 }
 
 void GlobeEditor::setupAircraft() {
@@ -255,6 +283,33 @@ void GlobeEditor::setupAircraft() {
 
     // connect feedback
     connect(m_dataFrame, &DataFrame::onTimeChanged, this, &GlobeEditor::update);
+}
+
+void GlobeEditor::changeLayer(const int index) {
+    QStringList list = {"Dark", "Navigation", "Streets", "Imagery", "Hillshade"};
+
+    switch(index){
+    case 0:
+        m_sceneView->arcGISScene()->setBasemap(new Basemap(BasemapStyle::ArcGISDarkGray, this));
+        m_sceneView->setAtmosphereEffect(AtmosphereEffect(0));
+        break;
+    case 1:
+        m_sceneView->arcGISScene()->setBasemap(new Basemap(BasemapStyle::ArcGISNavigationNight, this));
+        m_sceneView->setAtmosphereEffect(AtmosphereEffect(0));
+        break;
+    case 2:
+        m_sceneView->arcGISScene()->setBasemap(new Basemap(BasemapStyle::ArcGISStreetsNight, this));
+        m_sceneView->setAtmosphereEffect(AtmosphereEffect(0));
+        break;
+    case 3:
+        m_sceneView->arcGISScene()->setBasemap(new Basemap(BasemapStyle::ArcGISImagery, this));
+        m_sceneView->setAtmosphereEffect(AtmosphereEffect(2));
+        break;
+    case 4:
+        m_sceneView->arcGISScene()->setBasemap(new Basemap(BasemapStyle::ArcGISHillshadeDark, this));
+        m_sceneView->setAtmosphereEffect(AtmosphereEffect(0));
+        break;
+    }
 }
 
 void GlobeEditor::update() {

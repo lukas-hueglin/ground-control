@@ -4,23 +4,16 @@
 #include "pch.hpp"
 #endif // PCH_BUILD
 
-
-#include "ArcGISTiledElevationSource.h"
 #include "Graphic.h"
 #include "PictureMarkerSymbol.h"
-#include "OrbitGeoElementCameraController.h"
 #include "Map.h"
 #include "MapGraphicsView.h"
 #include "SimpleRenderer.h"
 #include "MapTypes.h"
 #include "GraphicsOverlayListModel.h"
 #include "GraphicListModel.h"
-#include "Surface.h"
-#include "ElevationSourceListModel.h"
-#include "LayerSceneProperties.h"
 #include "RendererSceneProperties.h"
 #include "AttributeListModel.h"
-#include "SceneViewTypes.h"
 #include "GraphicsOverlay.h"
 #include "SpatialReference.h"
 #include "Point.h"
@@ -28,11 +21,18 @@
 #include "PolylineBuilder.h"
 #include "SimpleLineSymbol.h"
 #include "SimpleMarkerSymbol.h"
-#include "RouteTask.h"
+#include "Basemap.h"
+#include "FeatureLayer.h"
+#include "LayerListModel.h"
+#include "ShapefileFeatureTable.h"
+#include "SymbolTypes.h"
+#include "SimpleFillSymbol.h"
+#include "SimpleRenderer.h"
 
 #include <QUrl>
 #include <QMainWindow>
 #include <QCheckBox>
+#include <QComboBox>
 
 using namespace Esri::ArcGISRuntime;
 
@@ -40,11 +40,18 @@ MapEditor::MapEditor(DataFrame *p_dataFrame, QWidget *parent)
     : Editor{p_dataFrame, parent}
 {
     // create a new scene
-    Map* map = new Map(BasemapStyle::ArcGISDarkGray, this);
+    m_map = new Map(BasemapStyle::ArcGISDarkGray, this);
+
+    // add drone layers
+    addShapeFileLayer(QString("C://Users//lukas//Documents//QtProjects//ground-control//arcgis//layers//UASZones//nature//nature.shp"), QColor(255, 170, 0), SimpleFillSymbolStyle::Solid);
+    addShapeFileLayer(QString("C://Users//lukas//Documents//QtProjects//ground-control//arcgis//layers//UASZones//sensitive//sensitive.shp"), QColor(0, 174, 255), SimpleFillSymbolStyle::Solid);
+    addShapeFileLayer(QString("C://Users//lukas//Documents//QtProjects//ground-control//arcgis//layers//UASZones//air_traffic_rst01//air_traffic_rst01.shp"), QColor(110, 0, 60), SimpleFillSymbolStyle::Solid);
+    addShapeFileLayer(QString("C://Users//lukas//Documents//QtProjects//ground-control//arcgis//layers//UASZones//air_traffic_rst02//air_traffic_rst02.shp"), QColor(255, 0, 234), SimpleFillSymbolStyle::Solid);
+    addShapeFileLayer(QString("C://Users//lukas//Documents//QtProjects//ground-control//arcgis//layers//UASZones//air_traffic_rst03//air_traffic_rst03.shp"), QColor(110, 110, 110), SimpleFillSymbolStyle::BackwardDiagonal);
 
     // create new SceneGraphicsView
     m_mapView = new MapGraphicsView(this);
-    m_mapView->setMap(map);
+    m_mapView->setMap(m_map);
 
     // set viewport and add to container
     m_viewport = m_mapView;
@@ -81,6 +88,7 @@ void MapEditor::setupDrawer() {
     m_drawer->setLayout(drawerLayout);
 
     QCheckBox *pathBox = new QCheckBox("Path", m_drawer);
+    pathBox->setProperty("cssClass", "drawerItem");
     pathBox->setChecked(true);
     drawerLayout->addWidget(pathBox);
     connect(pathBox, &QCheckBox::clicked, [this](bool state){
@@ -93,6 +101,7 @@ void MapEditor::setupDrawer() {
     });
 
     QCheckBox *routeBox = new QCheckBox("Route", m_drawer);
+    routeBox->setProperty("cssClass", "drawerItem");
     routeBox->setChecked(true);
     drawerLayout->addWidget(routeBox);
     connect(routeBox, &QCheckBox::clicked, [this](bool state){
@@ -102,6 +111,28 @@ void MapEditor::setupDrawer() {
             m_routeOverlay->graphics()->clear();
         }
     });
+
+    QCheckBox *uasBox = new QCheckBox("Show UAS Map", m_drawer);
+    uasBox->setProperty("cssClass", "drawerItem");
+    uasBox->setChecked(true);
+    drawerLayout->addWidget(uasBox);
+    connect(uasBox, &QCheckBox::clicked, [this](bool state){
+        for (int i = 0; i < m_map->operationalLayers()->size(); ++i) {
+            m_map->operationalLayers()->at(i)->setVisible(state);
+        }
+    });
+
+    QComboBox *basemapBox = new QComboBox(m_drawer);
+    basemapBox->setProperty("cssClass", "drawerItem");
+
+    QStringList list = {"Dark", "Navigation", "Streets", "Imagery", "Hillshade"};
+    basemapBox->addItems(list);
+
+    drawerLayout->addWidget(basemapBox);
+    connect(basemapBox, &QComboBox::currentIndexChanged, this, &MapEditor::changeBasemap);
+
+    // add strech item last
+    drawerLayout->addStretch(1);
 }
 
 void MapEditor::setupAircraft() {
@@ -183,6 +214,51 @@ void MapEditor::setupAircraft() {
 
     // connect feedback
     connect(m_dataFrame, &DataFrame::onTimeChanged, this, &MapEditor::update);
+}
+
+void MapEditor::addShapeFileLayer(QString path, QColor color, SimpleFillSymbolStyle style){
+    // create feature table and feature layer
+    ShapefileFeatureTable* featureTable = new ShapefileFeatureTable(path, this);
+    FeatureLayer* featureLayer = new FeatureLayer(featureTable, this);
+
+    // create the symbols for feature layer
+    SimpleLineSymbol* sls = new SimpleLineSymbol(SimpleLineSymbolStyle::Solid, color, 1.0f, this);
+
+    // change alpha of color
+    color.setAlpha(80);
+    SimpleFillSymbol* sfs = new SimpleFillSymbol(style,color , this);
+
+    // set the outline
+    sfs->setOutline(sls);
+
+    // create the renderer for the feature layer
+    SimpleRenderer* natureSimpleRenderer = new SimpleRenderer(sfs, this);
+    featureLayer->setRenderer(natureSimpleRenderer);
+
+    // add feature layer to map
+    m_map->operationalLayers()->append(featureLayer);
+}
+
+void MapEditor::changeBasemap(const int index) {
+    QStringList list = {"Dark", "Navigation", "Streets", "Imagery", "Hillshade"};
+
+    switch(index){
+        case 0:
+        m_mapView->map()->setBasemap(new Basemap(BasemapStyle::ArcGISDarkGray, this));
+            break;
+        case 1:
+            m_mapView->map()->setBasemap(new Basemap(BasemapStyle::ArcGISNavigationNight, this));
+            break;
+        case 2:
+            m_mapView->map()->setBasemap(new Basemap(BasemapStyle::ArcGISStreetsNight, this));
+            break;
+        case 3:
+            m_mapView->map()->setBasemap(new Basemap(BasemapStyle::ArcGISImagery, this));
+            break;
+        case 4:
+            m_mapView->map()->setBasemap(new Basemap(BasemapStyle::ArcGISHillshadeDark, this));
+            break;
+    }
 }
 
 void MapEditor::update() {

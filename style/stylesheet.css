@@ -267,3 +267,7 @@ QSlider::handle:horizontal:hover {
 *[cssClass~="close"]:pressed, *[cssClass~="close"]:hover {
     background-color: @Close02;
 }
+
+*[cssClass~="drawerItem"] {
+    margin: 10px 5px 5px 5px;
+}

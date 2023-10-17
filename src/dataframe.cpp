@@ -107,6 +107,10 @@ void DataFrame::setPlayState(bool p_play) {
     emit onPlayStateChanged(m_play);
 }
 
+void DataFrame::setLiveStream(bool p_liveStream) {
+    m_liveStream = p_liveStream;
+}
+
 void DataFrame::setFile(QFile *p_file){
     // set file
     m_file = p_file;

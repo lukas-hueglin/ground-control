@@ -11,7 +11,7 @@
         <file alias="default.xml">style/default.xml</file>
     </qresource>
     <qresource prefix="/themes">
-        <file alias="stylesheet.qss">style/stylesheet.qss</file>
+        <file alias="stylesheet.css">style/stylesheet.css</file>
         <file alias="darktheme.xml">style/darktheme.xml</file>
         <file alias="colorpresets.xml">style/colorpresets.xml</file>
     </qresource>
@@ -89,5 +89,27 @@
         <file alias="artificialhorizon_clear.png">style/bitmaps/artificialhorizon_clear.png</file>
         <file alias="artificialhorizon_overlay.png">style/bitmaps/artificialhorizon_overlay.png</file>
         <file alias="artificialhorizon_compass.png">style/bitmaps/artificialhorizon_compass.png</file>
+    </qresource>
+    <qresource prefix="/layers">
+        <file alias="air_traffic_rst01.dbf">arcgis/layers/UASZones/air_traffic_rst01/air_traffic_rst01.dbf</file>
+        <file alias="air_traffic_rst01.prj">arcgis/layers/UASZones/air_traffic_rst01/air_traffic_rst01.prj</file>
+        <file alias="air_traffic_rst01.shp">arcgis/layers/UASZones/air_traffic_rst01/air_traffic_rst01.shp</file>
+        <file alias="air_traffic_rst01.shx">arcgis/layers/UASZones/air_traffic_rst01/air_traffic_rst01.shx</file>
+        <file alias="air_traffic_rst02.dbf">arcgis/layers/UASZones/air_traffic_rst02/air_traffic_rst02.dbf</file>
+        <file alias="air_traffic_rst02.prj">arcgis/layers/UASZones/air_traffic_rst02/air_traffic_rst02.prj</file>
+        <file alias="air_traffic_rst02.shp">arcgis/layers/UASZones/air_traffic_rst02/air_traffic_rst02.shp</file>
+        <file alias="air_traffic_rst02.shx">arcgis/layers/UASZones/air_traffic_rst02/air_traffic_rst02.shx</file>
+        <file alias="air_traffic_rst03.dbf">arcgis/layers/UASZones/air_traffic_rst03/air_traffic_rst03.dbf</file>
+        <file alias="air_traffic_rst03.prj">arcgis/layers/UASZones/air_traffic_rst03/air_traffic_rst03.prj</file>
+        <file alias="air_traffic_rst03.shp">arcgis/layers/UASZones/air_traffic_rst03/air_traffic_rst03.shp</file>
+        <file alias="air_traffic_rst03.shx">arcgis/layers/UASZones/air_traffic_rst03/air_traffic_rst03.shx</file>
+        <file alias="nature.dbf">arcgis/layers/UASZones/nature/nature.dbf</file>
+        <file alias="nature.prj">arcgis/layers/UASZones/nature/nature.prj</file>
+        <file alias="nature.shp">arcgis/layers/UASZones/nature/nature.shp</file>
+        <file alias="nature.shx">arcgis/layers/UASZones/nature/nature.shx</file>
+        <file alias="sensitive.dbf">arcgis/layers/UASZones/sensitive/sensitive.dbf</file>
+        <file alias="sensitive.prj">arcgis/layers/UASZones/sensitive/sensitive.prj</file>
+        <file alias="sensitive.shp">arcgis/layers/UASZones/sensitive/sensitive.shp</file>
+        <file alias="sensitive.shx">arcgis/layers/UASZones/sensitive/sensitive.shx</file>
     </qresource>
 </RCC>

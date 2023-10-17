@@ -6,7 +6,7 @@
 #include <QTimer>
 
 #include "editors/grapheditor.h"
-#include "editors/inputeditor.h"
+#include "editors/ioeditor.h"
 #include "editors/timelineeditor.h"
 #include "editors/dashboardeditor.h"
 #include "editors/globeeditor.h"
@@ -28,7 +28,7 @@ Titlebar::Titlebar(Module *parent)
 
     m_comboBox->addItem(QIcon(":/icons/dark_empty.svg"), QString("Empty"));
     m_comboBox->addItem(QIcon(":/icons/dark_graph.svg"), QString("Graph Editor"));
-    m_comboBox->addItem(QIcon(":/icons/dark_input.svg"), QString("Input Editor"));
+    m_comboBox->addItem(QIcon(":/icons/dark_input.svg"), QString("IO Editor"));
     m_comboBox->addItem(QIcon(":/icons/dark_timeline.svg"), QString("Timeline Editor"));
     m_comboBox->addItem(QIcon(":/icons/dark_dashboard.svg"), QString("Dashboard Editor"));
     m_comboBox->addItem(QIcon(":/icons/dark_globe.svg"), QString("Globe Editor"));
@@ -200,7 +200,7 @@ void Module::changeEditor(const int index) {
         case 2:
             m_layout->removeWidget(m_editor);
             delete m_editor;
-            m_editor = new InputEditor(m_dataFrame, this);
+            m_editor = new IOEditor(m_dataFrame, this);
             m_layout->insertWidget(0, m_editor, 1);
             break;
         case 3:

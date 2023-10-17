@@ -1,10 +1,12 @@
 #ifndef MAPEDITOR_H
 #define MAPEDITOR_H
 
+#include "SimpleFillSymbol.h"
 #include "editor.h"
 
 namespace Esri::ArcGISRuntime {
     class MapGraphicsView;
+    class Map;
     class Graphic;
     class GraphicsOverlay;
     class SimpleLineSymbol;
@@ -30,8 +32,12 @@ public slots:
 private:
     void setupDrawer();
     void setupAircraft();
+    void changeBasemap(const int index);
+
+    void addShapeFileLayer(QString path, QColor color, Esri::ArcGISRuntime::SimpleFillSymbolStyle style);
 
 private:
+    Esri::ArcGISRuntime::Map *m_map;
     Esri::ArcGISRuntime::MapGraphicsView *m_mapView;
 
     Esri::ArcGISRuntime::Graphic *m_aircraftGraphic;

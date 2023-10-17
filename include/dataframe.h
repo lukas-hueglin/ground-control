@@ -33,6 +33,7 @@ public:
 public slots:
     void setTime(unsigned int p_time);
     void setPlayState(bool p_play);
+    void setLiveStream(bool p_liveStream);
     void setFile(QFile *p_file);
 
     void increaseSpeed();
@@ -62,6 +63,7 @@ private:
     int m_speed;
 
     bool m_play;
+    bool m_liveStream;
     bool m_alreadySetup;
 };
 

@@ -21,7 +21,6 @@ GraphEditor::GraphEditor(DataFrame *p_dataFrame, QWidget *parent)
     m_plot = new QCustomPlot;
     m_plot->addGraph();
 
-
     // set QMaps
     checkBoxes = new QMap<QString, QCheckBox*>;
     colorButtons = new QMap<QString, QPushButton*>;
@@ -80,13 +79,14 @@ void GraphEditor::setupDrawer() {
     Editor::setupDrawer();
 
     // create QVBoxLayout
-    QGridLayout *drawerLayout = new QGridLayout(m_drawer);
+    QVBoxLayout *drawerLayout = new QVBoxLayout(m_drawer);
     m_drawer->setLayout(drawerLayout);
 
     // create QCheckbox for aligning the plot on the x-axis
     QCheckBox *centerBox = new QCheckBox(QString("Align x-Axis"), m_drawer);
+    centerBox->setProperty("cssClass", "drawerItem");
     centerBox->setChecked(false);
-    drawerLayout->addWidget(centerBox, 0, 0);
+    drawerLayout->addWidget(centerBox);
 
     connect(centerBox, &QCheckBox::clicked, [this](bool state){
         if(state){
@@ -111,7 +111,6 @@ void GraphEditor::setupDrawer() {
             connect(checkBox, &QCheckBox::clicked, [this, row](bool checked){
                 m_plot->graph(row)->setVisible(checked);
             });
-            drawerLayout->addWidget(checkBox, row, 0);
 
             connect(colorButton, &QPushButton::pressed, [this, colorButton, row](){
                 QColorDialog *colorDialog = new QColorDialog(this);
@@ -126,13 +125,25 @@ void GraphEditor::setupDrawer() {
                 colorDialog->show();
             });
 
-            drawerLayout->addWidget(colorButton, row, 1);
+            // create container and add to layout
+            QWidget *container = new QWidget();
+            container->setProperty("cssClass", "drawerItem");
+
+            QHBoxLayout *l = new QHBoxLayout;
+            container->setLayout(l);
+            l->addWidget(checkBox);
+            l->addWidget(colorButton);
+
+            drawerLayout->addWidget(container);
 
             checkBoxes->insert(key, checkBox);
             colorButtons->insert(key, colorButton);
             ++row;
         }
     }
+
+    // add strech item last
+    drawerLayout->addStretch(1);
 }
 
 void GraphEditor::setupGraph() {
