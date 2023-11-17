@@ -24,11 +24,14 @@ public:
     void setPosition(float p_gpsN, float p_gpsE, float p_height);
     void setRotation(float p_roll, float p_pitch, float p_yaw);
 
+protected slots:
+    void setupViewport() override;
+    void setupDrawer() override;
+
 public slots:
     void update();
 
 private:
-    void setupDrawer();
     void setupAircraft();
     void changeLayer(const int index);
 
@@ -63,8 +66,6 @@ private:
     Esri::ArcGISRuntime::SimpleMarkerSymbol *m_groundMarker;
 
     QList<Esri::ArcGISRuntime::Point> *m_gpsPath;
-
-    bool properlySetup;
 };
 
 #endif // GLOBEEDITOR_H

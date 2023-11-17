@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
+<!--
+0: Editor
+1: GraphEditor
+2: IOEditor
+3: TimelineEditor
+4: DashboardEditor
+5: GlobeEditor
+6: MapEditor
+7: AHEditor
+-->
+
 <layout NUM="2">
     <workspace TITLE="Analyse" ICON=":/icons/dark_analyse.svg">
         <splitter RATIO="0.7" ORIENTATION="horizontal">

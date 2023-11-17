@@ -44,7 +44,7 @@ private slots:
 signals:
     void onTimeChanged(unsigned int p_time);
     void onPlayStateChanged(bool p_play);
-    void onFileChanged(QFile *p_file);
+    void onFileChange(QFile *p_file);
     void onSpeedIncreased(int p_speed);
 
 private:

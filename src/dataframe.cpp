@@ -194,7 +194,7 @@ void DataFrame::setFile(QFile *p_file){
 
     m_alreadySetup = true;
 
-    emit onFileChanged(m_file);
+    emit onFileChange(m_file);
 }
 
 void DataFrame::increaseSpeed() {

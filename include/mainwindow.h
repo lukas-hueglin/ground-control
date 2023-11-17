@@ -9,14 +9,13 @@
 #include <QDateTime>
 #include <QtXml>
 
-#include "dataframe.h"
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
 class Workspace;
 class Module;
+class DataFrame;
 
 class MainWindow : public QMainWindow
 {
@@ -24,7 +23,6 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
 
 private:
     void parseLayout(QDomDocument *xml);

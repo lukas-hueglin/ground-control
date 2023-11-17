@@ -1,5 +1,6 @@
 #include "workspace.h"
 
+#include "mainwindow.h"
 #include "module.h"
 
 Workspace::Workspace(MainWindow *parent)

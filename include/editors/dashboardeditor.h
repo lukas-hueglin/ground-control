@@ -10,19 +10,21 @@
 #include <QDockWidget>
 
 
-struct DashboardLabel : public QDockWidget
+struct Card : public QDockWidget
 {
     Q_OBJECT
 public:
-    DashboardLabel(DataFrame *p_dataFrame, QString strLabel, QString strValue, QWidget *parent = nullptr);
+    Card(DataFrame *p_dataFrame, QString strLabel, QString strValue, QWidget *parent = nullptr);
 
+public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
+public:
     DataFrame *m_dataFrame;
 
-    QLabel* label;
-    QLabel* value;
+    QLabel* m_label;
+    QLabel* m_value;
 };
 
 
@@ -32,24 +34,20 @@ class DashboardEditor : public Editor
 public:
     DashboardEditor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
-private:
-    void setupDrawer();
-    void setupDashboard();
-
-    void toggleLabel(QString key, bool checked);
+protected slots:
+    void setupViewport() override;
+    void setupDrawer() override;
 
 private:
-    QGridLayout *layout;
+    void toggleCard(QString key, bool checked);
 
-    QMap<QString, QCheckBox*> *checkBoxes;
-    QMap<QString, QPushButton*> *colorButtons;
+private:
+    QGridLayout *m_vpLayout;
 
-    QMap<QString, DashboardLabel*>* labels;
+    QMap<QString, QCheckBox*> *m_checkBoxes;
+    QMap<QString, QPushButton*> *m_colorButtons;
 
-    QLabel *failLabel;
-
-    bool properlySetup;
-
+    QMap<QString, Card*>* m_cards;
 };
 
 #endif // DASHBOARDEDITOR_H

@@ -14,23 +14,19 @@ class TimelineEditor : public Editor
 public:
     TimelineEditor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
-private:
-    void setupTimeline();
+protected slots:
+    void setupViewport() override;
 
 private:
-    QPushButton *toBeginButton;
-    QPushButton *backwardButton;
-    QPushButton *playButton;
-    QPushButton *toEndButton;
-    QPushButton *forwardButton;
-    QPushButton *speedButton;
+    QPushButton *m_toBeginButton;
+    QPushButton *m_backwardButton;
+    QPushButton *m_playButton;
+    QPushButton *m_toEndButton;
+    QPushButton *m_forwardButton;
+    QPushButton *m_speedButton;
 
-    QSlider *timeline;
-    QLabel *timeIndicator;
-
-    QLabel *failLabel;
-
-    bool properlySetup;
+    QSlider *m_timeline;
+    QLabel *m_timeIndicator;
 
 };
 

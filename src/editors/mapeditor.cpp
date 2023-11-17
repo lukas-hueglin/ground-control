@@ -33,12 +33,34 @@
 #include <QMainWindow>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QGroupBox>
+
+#include "helpers/drawer.h"
 
 using namespace Esri::ArcGISRuntime;
 
 MapEditor::MapEditor(DataFrame *p_dataFrame, QWidget *parent)
     : Editor{p_dataFrame, parent}
 {
+    // set QLists
+    m_gpsPath = new QList<Point>;
+
+    // connect setupViewport and setupDrawer methods
+    connect(m_dataFrame, &DataFrame::onFileChange, this, &MapEditor::setupViewport);
+    connect(m_dataFrame, &DataFrame::onFileChange, this, &MapEditor::setupDrawer);
+
+    // check if the dataframe is already ready
+    if (m_dataFrame->isAlreadySetup()) {
+        // call setupViewport and setupDrawer
+        setupViewport();
+        setupDrawer();
+    }
+}
+
+void MapEditor::setupViewport() {
+    // call parent function to delete the old viewport
+    Editor::setupViewport();
+
     // create a new scene
     m_map = new Map(BasemapStyle::ArcGISDarkGray, this);
 
@@ -53,41 +75,25 @@ MapEditor::MapEditor(DataFrame *p_dataFrame, QWidget *parent)
     m_mapView = new MapGraphicsView(this);
     m_mapView->setMap(m_map);
 
-    // set viewport and add to container
+    // set viewport to map View
     m_viewport = m_mapView;
-    m_container->addWidget(m_viewport);
+    m_layout->addWidget(m_viewport, 0, 1, 1, 1);
 
-    // set QLists
-    m_gpsPath = new QList<Point>;
-
-    // check if log file is already loaded
-    if (m_dataFrame->isAlreadySetup()){
-        setupAircraft();
-        setupDrawer();
-        // set properlySetup
-        properlySetup = true;
-    }
-    else {
-        // set properlySetup
-        properlySetup = false;
-    }
-
-    // connect reload of log file
-    connect(m_dataFrame, &DataFrame::onFileChanged, [this](){
-        setupAircraft();
-        setupDrawer();
-        properlySetup = true;
-    });
+    // call setupAircraft
+    setupAircraft();
 }
 
 void MapEditor::setupDrawer() {
+    // call parent function
     Editor::setupDrawer();
 
-    // create QVBoxLayout
-    QVBoxLayout *drawerLayout = new QVBoxLayout(m_drawer);
-    m_drawer->setLayout(drawerLayout);
+    // get parent
+    QGroupBox* drawer = m_drawer->getSettings();
 
-    QCheckBox *pathBox = new QCheckBox("Path", m_drawer);
+    // create QVBoxLayout
+    QVBoxLayout *drawerLayout = new QVBoxLayout(drawer);
+
+    QCheckBox *pathBox = new QCheckBox("Path", drawer);
     pathBox->setProperty("cssClass", "drawerItem");
     pathBox->setChecked(true);
     drawerLayout->addWidget(pathBox);
@@ -100,7 +106,7 @@ void MapEditor::setupDrawer() {
         }
     });
 
-    QCheckBox *routeBox = new QCheckBox("Route", m_drawer);
+    QCheckBox *routeBox = new QCheckBox("Route", drawer);
     routeBox->setProperty("cssClass", "drawerItem");
     routeBox->setChecked(true);
     drawerLayout->addWidget(routeBox);
@@ -112,7 +118,7 @@ void MapEditor::setupDrawer() {
         }
     });
 
-    QCheckBox *uasBox = new QCheckBox("Show UAS Map", m_drawer);
+    QCheckBox *uasBox = new QCheckBox("Show UAS Map", drawer);
     uasBox->setProperty("cssClass", "drawerItem");
     uasBox->setChecked(true);
     drawerLayout->addWidget(uasBox);
@@ -133,6 +139,9 @@ void MapEditor::setupDrawer() {
 
     // add strech item last
     drawerLayout->addStretch(1);
+
+    // add drawerLayout to drawer
+    m_drawer->setupContent(drawerLayout);
 }
 
 void MapEditor::setupAircraft() {

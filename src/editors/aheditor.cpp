@@ -5,57 +5,27 @@
 AHEditor::AHEditor(DataFrame *p_dataFrame, QWidget *parent)
     : Editor{p_dataFrame, parent}
 {
-    // create QWidget as viewport
-    m_viewport = new QWidget(parent);
+    // connect setupViewport method
+    connect(m_dataFrame, &DataFrame::onFileChange, this, &AHEditor::setupViewport);
 
-    // add viewport to container
-    m_container->addWidget(m_viewport);
-
-    // create QGridLayout
-    QGridLayout *layout = new QGridLayout(m_viewport);
-    layout->setContentsMargins(0, 0, 0, 0);
-    m_viewport->setLayout(layout);
-
-    // create QLabel as failLabel
-    failLabel = new QLabel(QString("Load a log file first!"), m_viewport);
-    failLabel->setAlignment(Qt::AlignCenter);
-
-
-    // check if log file is already loaded
-    if (m_dataFrame->isAlreadySetup()){
-        setupHorizon();
-
-        // set properlySetup
-        properlySetup = true;
+    // check if the dataframe is already ready
+    if (m_dataFrame->isAlreadySetup()) {
+        // call setupViewport
+        setupViewport();
     }
-    else {
-        // set viewport
-        layout->addWidget(failLabel, 0, 0, 1, 1);
-
-        // set properlySetup
-        properlySetup = false;
-    }
-
-    // connect reload of log file
-    connect(m_dataFrame, &DataFrame::onFileChanged, [this](){
-        setupHorizon();
-        properlySetup = true;
-    });
 }
 
-void AHEditor::setupHorizon(){
-    // delete old QGridlayout and QLabel
-    delete m_viewport->layout();
-    delete failLabel;
+void AHEditor::setupViewport(){
+    // call parent function to delete the old viewport
+    Editor::setupViewport();
 
-    // create QGridLayout
-    QGridLayout *layout = new QGridLayout(m_viewport);
-    m_viewport->setLayout(layout);
+    // create artificial horizon
+    ArtificialHorizon *ah = new ArtificialHorizon(m_dataFrame, this);
 
-    layout->setContentsMargins(0, 0, 0, 0);
+    // set viewport to artificial horizon
+    m_viewport = ah;
+    m_layout->addWidget(m_viewport, 0, 1, 1, 1);
 
-    ArtificialHorizon *ah = new ArtificialHorizon(m_dataFrame, m_viewport);
-    layout->addWidget(ah);
-
+    // connect update
     connect(m_dataFrame, &DataFrame::onTimeChanged, ah, &ArtificialHorizon::update);
 }

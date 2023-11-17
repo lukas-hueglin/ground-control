@@ -1,9 +1,7 @@
 #ifndef AHEditorEDITOR_H
 #define AHEditorEDITOR_H
 
-
 #include "editor.h"
-#include "qlabel.h"
 
 
 class AHEditor : public Editor
@@ -12,13 +10,8 @@ class AHEditor : public Editor
 public:
     AHEditor(DataFrame *p_dataFrame, QWidget *parent = nullptr);
 
-private:
-    void setupHorizon();
-
-private:
-    QLabel *failLabel;
-
-    bool properlySetup;
+protected slots:
+    void setupViewport() override;
 
 };
 

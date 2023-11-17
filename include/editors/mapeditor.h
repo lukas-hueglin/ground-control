@@ -26,11 +26,14 @@ public:
     void setPosition(float p_gpsN, float p_gpsE);
     void setRotation(float p_yaw);
 
+protected slots:
+    void setupViewport() override;
+    void setupDrawer() override;
+
 public slots:
     void update();
 
 private:
-    void setupDrawer();
     void setupAircraft();
     void changeBasemap(const int index);
 
@@ -61,8 +64,6 @@ private:
 
     Esri::ArcGISRuntime::RouteTask *m_routeTask;
     Esri::ArcGISRuntime::RouteTracker *m_routeTracker;
-
-    bool properlySetup;
 };
 
 #endif // MAPEDITOR_H

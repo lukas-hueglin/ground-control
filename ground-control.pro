@@ -1,4 +1,4 @@
-QT       += core gui charts widgets openglwidgets xml
+QT += core gui charts widgets openglwidgets xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets printsupport
 
@@ -15,41 +15,47 @@ INCLUDEPATH += \
     $$PWD/include
 
 SOURCES += \
-    $$PWD/src/editors/aheditor.cpp \
-    $$PWD/src/helpers/artificialhorizon.cpp \
-    $$PWD/src/editors/dashboardeditor.cpp \
     $$PWD/src/dataframe.cpp \
-    $$PWD/src/helpers/dataseries.cpp \
     $$PWD/src/editor.cpp \
+    $$PWD/src/main.cpp \
+    $$PWD/src/mainwindow.cpp \
+    $$PWD/src/module.cpp \
+    $$PWD/src/viewport.cpp \
+    $$PWD/src/workspace.cpp \
+    $$PWD/src/editors/aheditor.cpp \
+    $$PWD/src/editors/dashboardeditor.cpp \
     $$PWD/src/editors/globeeditor.cpp \
     $$PWD/src/editors/grapheditor.cpp \
     $$PWD/src/editors/ioeditor.cpp \
-    $$PWD/src/main.cpp \
-    $$PWD/src/mainwindow.cpp \
     $$PWD/src/editors/mapeditor.cpp \
-    $$PWD/src/module.cpp \
     $$PWD/src/editors/timelineeditor.cpp \
-    $$PWD/src/viewport.cpp \
-    $$PWD/src/workspace.cpp \
-    $$PWD/src/helpers/qcustomplot.cpp
+    $$PWD/src/helpers/artificialhorizon.cpp \
+    $$PWD/src/helpers/dataseries.cpp \
+    $$PWD/src/helpers/drawer.cpp \
+    $$PWD/src/helpers/qcustomplot.cpp \
+    $$PWD/src/helpers/statusbar.cpp \
+    $$PWD/src/helpers/titlebar.cpp
 
 HEADERS += \
-    $$PWD/include/editors/aheditor.h \
-    $$PWD/include/helpers/artificialhorizon.h \
-    $$PWD/include/editors/dashboardeditor.h \
     $$PWD/include/dataframe.h \
-    $$PWD/include/helpers/dataseries.h \
     $$PWD/include/editor.h \
+    $$PWD/include/mainwindow.h \
+    $$PWD/include/module.h \
+    $$PWD/include/viewport.h \
+    $$PWD/include/workspace.h \
+    $$PWD/include/editors/aheditor.h \
+    $$PWD/include/editors/dashboardeditor.h \
     $$PWD/include/editors/globeeditor.h \
     $$PWD/include/editors/grapheditor.h \
     $$PWD/include/editors/ioeditor.h \
-    $$PWD/include/mainwindow.h \
     $$PWD/include/editors/mapeditor.h \
-    $$PWD/include/module.h \
     $$PWD/include/editors/timelineeditor.h \
-    $$PWD/include/viewport.h \
-    $$PWD/include/workspace.h \
-    $$PWD/include/helpers/qcustomplot.h
+    $$PWD/include/helpers/artificialhorizon.h \
+    $$PWD/include/helpers/dataseries.h \
+    $$PWD/include/helpers/drawer.h \
+    $$PWD/include/helpers/qcustomplot.h \
+    $$PWD/include/helpers/statusbar.h \
+    $$PWD/include/helpers/titlebar.h
 
 FORMS += \
     $$PWD/forms/mainwindow.ui

@@ -40,12 +40,114 @@
 #include <QMainWindow>
 #include <QCheckBox>
 #include <QComboBox>
+#include <QGroupBox>
+
+#include "helpers/drawer.h"
 
 using namespace Esri::ArcGISRuntime;
 
 GlobeEditor::GlobeEditor(DataFrame *p_dataFrame, QWidget *parent)
     : Editor{p_dataFrame, parent}
 {
+    // set QLists
+    m_gpsPath = new QList<Point>;
+
+    // connect setupViewport and setupDrawer methods
+    connect(m_dataFrame, &DataFrame::onFileChange, this, &GlobeEditor::setupViewport);
+    connect(m_dataFrame, &DataFrame::onFileChange, this, &GlobeEditor::setupDrawer);
+
+    // check if the dataframe is already ready
+    if (m_dataFrame->isAlreadySetup()) {
+        // call setupViewport and setupDrawer
+        setupViewport();
+        setupDrawer();
+    }
+}
+
+void GlobeEditor::setupDrawer() {
+    // call parent function
+    Editor::setupDrawer();
+
+    // get parent
+    QGroupBox* drawer = m_drawer->getSettings();
+
+    // create QVBoxLayout
+    QVBoxLayout *drawerLayout = new QVBoxLayout(drawer);
+
+    // create QCheckBoxes
+    QCheckBox *cameraBox = new QCheckBox("Aircraft Camera", drawer);
+    cameraBox->setProperty("cssClass", "drawerItem");
+    cameraBox->setChecked(true);
+    drawerLayout->addWidget(cameraBox);
+    connect(cameraBox, &QCheckBox::clicked, [this](bool state){
+        OrbitGeoElementCameraController *camera = state ? m_aircraftCamera : m_groundCamera;
+        m_sceneView->setCameraController(camera);
+    });
+
+    QCheckBox *airPathBox = new QCheckBox("Air Path", drawer);
+    airPathBox->setProperty("cssClass", "drawerItem");
+    airPathBox->setChecked(true);
+    drawerLayout->addWidget(airPathBox);
+    connect(airPathBox, &QCheckBox::clicked, [this](bool state){
+        if (state) {
+            m_airPathOverlay->graphics()->append(m_flownAirPathGraphic);
+            m_airPathOverlay->graphics()->append(m_remainingAirPathGraphic);
+        } else {
+            m_airPathOverlay->graphics()->clear();
+        }
+    });
+
+    QCheckBox *groundPathBox = new QCheckBox("Ground Path", drawer);
+    groundPathBox->setProperty("cssClass", "drawerItem");
+    groundPathBox->setChecked(true);
+    drawerLayout->addWidget(groundPathBox);
+    connect(groundPathBox, &QCheckBox::clicked, [this](bool state){
+        if (state) {
+            m_groundPathOverlay->graphics()->append(m_flownGroundPathGraphic);
+            m_groundPathOverlay->graphics()->append(m_remainingGroundPathGraphic);
+        } else {
+            m_groundPathOverlay->graphics()->clear();
+        }
+    });
+
+    QCheckBox *beaconBox = new QCheckBox("Beacon", drawer);
+    beaconBox->setProperty("cssClass", "drawerItem");
+    beaconBox->setChecked(true);
+    drawerLayout->addWidget(beaconBox);
+    connect(beaconBox, &QCheckBox::clicked, [this, cameraBox](bool state){
+        if (state) {
+            m_beaconOverlay->graphics()->append(m_beaconGraphic);
+            m_beaconOverlay->graphics()->append(m_groundGraphic);
+            cameraBox->setEnabled(true);
+        } else {
+            m_beaconOverlay->graphics()->clear();
+
+            m_sceneView->setCameraController(m_aircraftCamera);
+            cameraBox->setChecked(true);
+            cameraBox->setEnabled(false);
+        }
+    });
+
+    QComboBox *layerBox = new QComboBox(drawer);
+    layerBox->setProperty("cssClass", "drawerItem");
+
+    QStringList list = {"Dark", "Navigation", "Streets", "Imagery", "Hillshade"};
+    layerBox->addItems(list);
+
+    drawerLayout->addWidget(layerBox);
+    connect(layerBox, &QComboBox::currentIndexChanged, this, &GlobeEditor::changeLayer);
+
+    // add strech item last
+    drawerLayout->addStretch(1);
+
+    // add drawerLayout to drawer
+    m_drawer->setupContent(drawerLayout);
+}
+
+void GlobeEditor::setupViewport() {
+    // call parent function to delete the old viewport
+    Editor::setupViewport();
+
     // create a new scene
     Scene* m_scene = new Scene(BasemapStyle::ArcGISDarkGray, this);
 
@@ -67,105 +169,12 @@ GlobeEditor::GlobeEditor(DataFrame *p_dataFrame, QWidget *parent)
     // set atmoshpere effect to realistic
     m_sceneView->setAtmosphereEffect(AtmosphereEffect(0));
 
-    // set viewport and add to container
+    // set viewport to sceneView
     m_viewport = m_sceneView;
-    m_container->addWidget(m_viewport);
+    m_layout->addWidget(m_viewport, 0, 1, 1, 1);
 
-    // set QLists
-    m_gpsPath = new QList<Point>;
-
-    // check if log file is already loaded
-    if (m_dataFrame->isAlreadySetup()){
-        setupAircraft();
-        setupDrawer();
-        // set properlySetup
-        properlySetup = true;
-    }
-    else {
-        // set properlySetup
-        properlySetup = false;
-    }
-
-    // connect reload of log file
-    connect(m_dataFrame, &DataFrame::onFileChanged, [this](){
-        setupAircraft();
-        setupDrawer();
-        properlySetup = true;
-    });
-}
-
-void GlobeEditor::setupDrawer() {
-    Editor::setupDrawer();
-
-    // create QVBoxLayout
-    QVBoxLayout *drawerLayout = new QVBoxLayout(m_drawer);
-    m_drawer->setLayout(drawerLayout);
-
-    // create QCheckBoxes
-    QCheckBox *cameraBox = new QCheckBox("Aircraft Camera", m_drawer);
-    cameraBox->setProperty("cssClass", "drawerItem");
-    cameraBox->setChecked(true);
-    drawerLayout->addWidget(cameraBox);
-    connect(cameraBox, &QCheckBox::clicked, [this](bool state){
-        OrbitGeoElementCameraController *camera = state ? m_aircraftCamera : m_groundCamera;
-        m_sceneView->setCameraController(camera);
-    });
-
-    QCheckBox *airPathBox = new QCheckBox("Air Path", m_drawer);
-    airPathBox->setProperty("cssClass", "drawerItem");
-    airPathBox->setChecked(true);
-    drawerLayout->addWidget(airPathBox);
-    connect(airPathBox, &QCheckBox::clicked, [this](bool state){
-        if (state) {
-            m_airPathOverlay->graphics()->append(m_flownAirPathGraphic);
-            m_airPathOverlay->graphics()->append(m_remainingAirPathGraphic);
-        } else {
-            m_airPathOverlay->graphics()->clear();
-        }
-    });
-
-    QCheckBox *groundPathBox = new QCheckBox("Ground Path", m_drawer);
-    groundPathBox->setProperty("cssClass", "drawerItem");
-    groundPathBox->setChecked(true);
-    drawerLayout->addWidget(groundPathBox);
-    connect(groundPathBox, &QCheckBox::clicked, [this](bool state){
-        if (state) {
-            m_groundPathOverlay->graphics()->append(m_flownGroundPathGraphic);
-            m_groundPathOverlay->graphics()->append(m_remainingGroundPathGraphic);
-        } else {
-            m_groundPathOverlay->graphics()->clear();
-        }
-    });
-
-    QCheckBox *beaconBox = new QCheckBox("Beacon", m_drawer);
-    beaconBox->setProperty("cssClass", "drawerItem");
-    beaconBox->setChecked(true);
-    drawerLayout->addWidget(beaconBox);
-    connect(beaconBox, &QCheckBox::clicked, [this, cameraBox](bool state){
-        if (state) {
-            m_beaconOverlay->graphics()->append(m_beaconGraphic);
-            m_beaconOverlay->graphics()->append(m_groundGraphic);
-            cameraBox->setEnabled(true);
-        } else {
-            m_beaconOverlay->graphics()->clear();
-
-            m_sceneView->setCameraController(m_aircraftCamera);
-            cameraBox->setChecked(true);
-            cameraBox->setEnabled(false);
-        }
-    });
-
-    QComboBox *layerBox = new QComboBox(m_drawer);
-    layerBox->setProperty("cssClass", "drawerItem");
-
-    QStringList list = {"Dark", "Navigation", "Streets", "Imagery", "Hillshade"};
-    layerBox->addItems(list);
-
-    drawerLayout->addWidget(layerBox);
-    connect(layerBox, &QComboBox::currentIndexChanged, this, &GlobeEditor::changeLayer);
-
-    // add strech item last
-    drawerLayout->addStretch(1);
+    // call setupAircraft
+    setupAircraft();
 }
 
 void GlobeEditor::setupAircraft() {

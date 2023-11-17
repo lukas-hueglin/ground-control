@@ -28,10 +28,11 @@ public:
     void keyPressEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
     void keyReleaseEvent(QKeyEvent *event) Q_DECL_OVERRIDE;
 
-private:
-    void setupDrawer();
-    void setupGraph();
+protected slots:
+    void setupViewport() override;
+    void setupDrawer() override;
 
+private:
     void setGraphColor(QColor color);
     void setGraphColor(int index, QColor color);
 
@@ -49,10 +50,6 @@ private:
 
     QDateTimeAxis *m_axisT;
     QValueAxis *m_axisY;
-
-    QLabel *failLabel;
-
-    bool properlySetup;
 };
 
 #endif // GRAPHEDITOR_H

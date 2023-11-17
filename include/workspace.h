@@ -2,8 +2,8 @@
 #define WORKSPACE_H
 
 #include <QMainWindow>
-#include "mainwindow.h"
 
+class MainWindow;
 class Module;
 
 class Workspace : public QMainWindow

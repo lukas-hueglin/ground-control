@@ -5,7 +5,8 @@
 #include <QPushButton>
 #include <QLabel>
 
-#include "module.h"
+#include "helpers/statusbar.h"
+#include "helpers/drawer.h"
 
 
 Editor::Editor(DataFrame *p_dataFrame, QWidget *parent)
@@ -14,18 +15,25 @@ Editor::Editor(DataFrame *p_dataFrame, QWidget *parent)
     // set dataFrame
     m_dataFrame = p_dataFrame;
 
-    // create QHBoxLayout
-    m_container = new QHBoxLayout;
-    m_container->setContentsMargins(0, 0, 0, 0);
-    setLayout(m_container);
+    // create QGridLayout
+    m_layout = new QGridLayout(this);
+    m_layout->setContentsMargins(5, 5, 5, 5);
 
-    // connect statusbar
-    Module *module = qobject_cast<Module*>(parent);
+    // create new Statusbar
+    m_statusbar = new Statusbar(this);
+    m_layout->addWidget(m_statusbar, 1, 0, 1, 2);
 
-    connect(this, &Editor::onStatusChangeSuccess, module, &Module::setStatusSuccess);
-    connect(this, &Editor::onStatusChangeWorking, module, &Module::setStatusWorking);
-    connect(this, &Editor::onStatusChangeOK, module, &Module::setStatusOK);
-    connect(this, &Editor::onStatusChangeFail, module, &Module::setStatusFail);
+    // create new Drawer
+    m_drawer = new Drawer(this);
+    m_layout->addWidget(m_drawer, 0, 0, 1, 1);
+
+    // create new viewport
+    m_viewport = new QWidget(this);
+    m_layout->addWidget(m_viewport, 0, 1, 1, 1);
+
+    // set streches to minimize statusbar and maximize viewport
+    m_layout->setRowStretch(0, 1);
+    m_layout->setColumnStretch(1, 1);
 }
 
 QWidget* Editor::getViewport() {
@@ -33,51 +41,17 @@ QWidget* Editor::getViewport() {
 }
 
 QSize Editor::sizeHint() const {
-    return QSize(100, 50);
+    return QSize(300, 200);
 }
 
 QSize Editor::minimumSizeHint() const {
     return QSize(0, 0);
 }
 
-void Editor::setupDrawer() {
-    // create QGroupBox
-    m_drawer = new QGroupBox(QString("Settings"), this);
-
-    // add drawer to layout
-    m_container->insertWidget(0, m_drawer);
-
-    // create QToolButton
-    m_drawerButton = new QToolButton(this);
-    m_drawerButton->setArrowType(Qt::ArrowType::RightArrow);
-    m_drawerButton->setCheckable(true);
-    m_drawerButton->setChecked(false);
-
-    // add drawer to layout
-    m_container->insertWidget(1, m_drawerButton, 0, Qt::AlignTop);
-
-    // create QPropertyAnimations for QGroupWidget
-    QPropertyAnimation *groupAnim = new QPropertyAnimation(m_drawer, "maximumWidth", m_viewport);
-
-    // set position and size of widget and drawerButton
-    m_drawer->setMaximumWidth(0);
-    m_drawerButton->setFixedSize(15, 20);
-
-    // set settings for groupAnim
-    groupAnim->setDuration(200);
-    groupAnim->setStartValue(0);
-    groupAnim->setEndValue(400);
-
-    // create QParallelAnimationGroup
-    m_drawerAnim = new QParallelAnimationGroup;
-    m_drawerAnim->addAnimation(groupAnim);
-
-
-    // connect drawerButton to animations
-    connect(m_drawerButton, &QToolButton::clicked, [this](const bool checked) {
-        m_drawerButton->setArrowType(checked ? Qt::ArrowType::LeftArrow : Qt::ArrowType::RightArrow);
-        m_drawerAnim->setDirection(checked ? QAbstractAnimation::Forward : QAbstractAnimation::Backward);
-        m_drawerAnim->start();
-    });
+void Editor::setupViewport() {
+    m_layout->removeWidget(m_viewport);
+    delete m_viewport;
 }
+
+void Editor::setupDrawer() {}
 

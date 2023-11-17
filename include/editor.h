@@ -1,15 +1,14 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include <QHBoxLayout>
-#include <QGroupBox>
-#include <QToolButton>
-#include <QParallelAnimationGroup>
+#include <QWidget>
+#include <QGridLayout>
 
 #include "dataframe.h"
 
 class Module;
-
+class Statusbar;
+class Drawer;
 
 class Editor : public QWidget
 {
@@ -23,24 +22,18 @@ public:
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-protected:
-    void setupDrawer();
-
-signals:
-    void onStatusChangeSuccess(QString message = QString());
-    void onStatusChangeWorking(QString message = QString());
-    void onStatusChangeOK(QString message = QString());
-    void onStatusChangeFail(QString message = QString());
+protected slots:
+    virtual void setupDrawer();
+    virtual void setupViewport();
 
 protected:
     DataFrame *m_dataFrame;
 
-    QHBoxLayout *m_container;
-    QWidget *m_viewport;
+    QGridLayout* m_layout;
 
-    QGroupBox *m_drawer;
-    QToolButton *m_drawerButton;
-    QParallelAnimationGroup *m_drawerAnim;
+    QWidget *m_viewport;
+    Statusbar* m_statusbar;
+    Drawer* m_drawer;
 };
 
 #endif // EDITOR_H

@@ -1,14 +1,16 @@
 #include "mainwindow.h"
+
+#include <QTimer>
+#include <QSizePolicy>
+#include <QFile>
+#include <QFontDatabase>
+
 #include "ui_mainwindow.h"
 
 #include "module.h"
 #include "workspace.h"
+#include "dataframe.h"
 
-#include <QTimer>
-#include <QSizePolicy>
-
-#include <QFile>
-#include <QFontDatabase>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
@@ -60,17 +62,13 @@ MainWindow::MainWindow(QWidget *parent)
     }
 }
 
-MainWindow::~MainWindow() {
-    delete ui;
-}
-
 void MainWindow::parseLayout(QDomDocument *xml) {
     QDomElement layout = xml->documentElement();
 
     // go through all workspaces
     QDomElement element = layout.firstChildElement();
 
-    for(int i = 0; !element.isNull(); ++i) {
+    while (!element.isNull()) {
         QString title = element.attribute("TITLE", "NoTitle");
         QString icon = element.attribute("ICON", "NoIcon");
 
